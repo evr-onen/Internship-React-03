@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
-function ComponentName() {
+function FrontPage() {
   return <>Evrenowsky</>
 }
 
-export default ComponentName
+export default FrontPage
