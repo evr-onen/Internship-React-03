@@ -1,16 +1,22 @@
-import React, { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Form, FormGroup, Input, Label, Button, CardBody, Card } from "reactstrap"
 import Axios from "axios"
-import getToken from "jwt-decode"
+import { userLogin } from "../Services/auth"
 
 function Login() {
-  function login() {
-    Axios.post("http://127.0.0.1:8000/api/auth/login", { email: "evr.onen@gmail.com", password: " " }).then((response) => {
-      console.log(response)
-    })
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  })
+  function loginHandler() {
+    userLogin(loginData.email, loginData.password)
   }
+
   return (
-    <div className="login d-flex justify-content-center  vh-100 align-items-center">
+    <div className="login d-flex justify-content-center  vh-100 align-items-center flex-column">
+      <div className="title mb-5">
+        <h1>Login</h1>
+      </div>
       <Card
         style={{
           width: "18rem",
@@ -19,17 +25,38 @@ function Login() {
         <CardBody>
           <Form inline>
             <FormGroup floating>
-              <Input id="exampleEmail" name="email" placeholder="Email" type="email" />
+              <Input
+                id="exampleEmail"
+                name="email"
+                placeholder="Email"
+                type="email"
+                value={loginData.email}
+                onChange={(e) => {
+                  setLoginData((prev) => ({ ...prev, email: e.target.value }))
+                }}
+              />
               <Label for="exampleEmail">Email</Label>
             </FormGroup>{" "}
             <FormGroup floating>
-              <Input id="examplePassword" name="password" placeholder="Password" type="password" />
+              <Input
+                id="examplePassword"
+                name="password"
+                placeholder="Password"
+                type="password"
+                value={loginData.password}
+                onChange={(e) => {
+                  setLoginData((prev) => ({ ...prev, password: e.target.value }))
+                }}
+              />
               <Label for="examplePassword">Password</Label>
             </FormGroup>{" "}
-            <Button onClick={() => login()}>Submit</Button>
+            <Button onClick={() => loginHandler()}>Submit</Button>
           </Form>
         </CardBody>
       </Card>
+      <p>
+        Henüz kayıt olmadıysanız <a href="/register-user">buradan</a> kayıt olabilirsiniz.
+      </p>
     </div>
   )
 }

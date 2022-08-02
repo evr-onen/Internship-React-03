@@ -8,7 +8,7 @@ function Header(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const togglee = () => setDropdownOpen((prevState) => !prevState)
   return (
-    <div>
+    <div className="header">
       <Navbar bg="light" expand="lg">
         <Container>
           <Navbar color="light" light expand="md">
@@ -18,24 +18,34 @@ function Header(props) {
                 setIsOpen(!isOpen)
               }}
             />
-            <Collapse isOpen={isOpen} navbar>
+            <Collapse className="navbar-btns" isOpen={isOpen} navbar>
               <Nav className="mr-auto" navbar>
                 <NavItem>
-                  <NavLink href="#">Home</NavLink>
+                  <NavLink href="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Login</NavLink>
+                  <NavLink href="#">Mağaza Yönetimi</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Signup</NavLink>
+                  <NavLink href="/admin">Admin</NavLink>
                 </NavItem>
               </Nav>
-              <Dropdown className="ms-auto" isOpen={dropdownOpen} toggle={togglee} {...props}>
+              <a className="enter-register ms-auto" href="/register-user">
+                Register
+              </a>
+              <a className="enter-login ms-3" href="/login">
+                Login
+              </a>
+              <Dropdown isOpen={dropdownOpen} toggle={togglee} {...props}>
                 <DropdownToggle color="danger" size="sm">
                   User Name
                 </DropdownToggle>
                 <DropdownMenu dark>
-                  <DropdownItem>Mağazaya Giriş</DropdownItem>
+                  <DropdownItem>
+                    <a className="enter-store" href="/store-management">
+                      Mağazaya Giriş
+                    </a>
+                  </DropdownItem>
                   <DropdownItem>LogOut</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
