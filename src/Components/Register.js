@@ -1,6 +1,7 @@
 import { userLogin, userRegister } from "../Services/auth"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 
 import { Form, FormGroup, Label, Input, Button, Card, CardBody } from "reactstrap"
 
@@ -12,6 +13,12 @@ function Register() {
     password: "",
     password_confirmation: "",
   })
+  const appState = useSelector((state) => state.user)
+
+  useEffect(() => {
+    appState.user.isLogin && Navigate("/")
+  })
+
   function registerHandler() {
     userRegister(getRegData.name, getRegData.email, getRegData.password, getRegData.password_confirmation)
       .then(() => {

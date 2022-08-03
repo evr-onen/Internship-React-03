@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from "reactstrap"
 
+import AdminCategory from "./AdminCategory"
+
 function Admin() {
   const [activeTab, setActiveTab] = useState("1")
 
@@ -29,10 +31,12 @@ function Admin() {
         </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">Tab 1 Content</TabPane>
-        <TabPane tabId="2">Tab 2 Content</TabPane>
-        <TabPane tabId="3">Tab 3 Content</TabPane>
-        <TabPane tabId="4">Tab 4 Content</TabPane>
+        <TabPane tabId="1">Dashboard Content</TabPane>
+        <TabPane tabId="2">Product Content</TabPane>
+        <TabPane tabId="3">
+          <AdminCategory />
+        </TabPane>
+        <TabPane tabId="4">Stores Content</TabPane>
       </TabContent>
     </div>
   )

@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Axios from "axios"
+import { setDataLocaltoState } from "./Stores/userStore"
+import { useDispatch } from "react-redux"
 
 import FrontPage from "./Components/FrontPage"
 import Header from "./Components/Header"
@@ -15,6 +17,11 @@ import Register from "./Components/Register"
 Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
 
 function App() {
+  const Dispatch = useDispatch()
+  if (localStorage.getItem("token")) {
+    Dispatch(setDataLocaltoState(localStorage.getItem("token")))
+  }
+
   return (
     <BrowserRouter>
       <Header />

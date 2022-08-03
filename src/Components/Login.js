@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+
 import { Form, FormGroup, Input, Label, Button, CardBody, Card } from "reactstrap"
-import Axios from "axios"
+
 import { userLogin } from "../Services/auth"
+import { takeToken, takeTokenData } from "../Stores/userStore"
 
 function Login() {
+  const Navigate = useNavigate()
+  const Dispatch = useDispatch()
+  const appState = useSelector((state) => state.user)
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   })
+  appState.user.isLogin && Navigate("/")
+
   function loginHandler() {
-    userLogin(loginData.email, loginData.password)
+    userLogin(loginData.email, loginData.password).then(() => {
+      Dispatch(takeToken(localStorage.getItem("token")))
+
+      Dispatch(takeTokenData(JSON.parse(localStorage.getItem("userData"))))
+    })
+    console.log(appState)
   }
 
   return (
-    <div className="login d-flex justify-content-center  vh-100 align-items-center flex-column">
+    <div className="login d-flex justify-content-center align-items-center flex-column">
       <div className="title mb-5">
         <h1>Login</h1>
       </div>

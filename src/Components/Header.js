@@ -1,12 +1,28 @@
-import React, { useEffect, useState } from "react"
-import { Navbar, Nav, DropdownToggle, DropdownMenu, Dropdown, DropdownItem, Container, Collapse, NavbarToggler, NavItem, NavLink, NavbarBrand } from "reactstrap"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+
+import { Navbar, Button, Nav, DropdownToggle, DropdownMenu, Dropdown, DropdownItem, Container, Collapse, NavbarToggler, NavItem, NavLink, NavbarBrand } from "reactstrap"
+
+import { userLogout } from "../Services/auth"
+import { removeTokenData } from "../Stores/userStore"
 
 function Header(props) {
+  const Navigate = useNavigate()
+  const Dispatch = useDispatch()
+  const appState = useSelector((state) => state.user)
+
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => setIsOpen(!isOpen)
 
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const togglee = () => setDropdownOpen((prevState) => !prevState)
+
+  function logoutHandler() {
+    userLogout(appState.user.token)
+    Dispatch(removeTokenData())
+    console.log(appState.user)
+  }
   return (
     <div className="header">
       <Navbar bg="light" expand="lg">
@@ -24,31 +40,48 @@ function Header(props) {
                   <NavLink href="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="#">Mağaza Yönetimi</NavLink>
+                  <NavLink href="/store-management">Mağaza Yönetimi</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink href="/admin">Admin</NavLink>
                 </NavItem>
               </Nav>
-              <a className="enter-register ms-auto" href="/register-user">
-                Register
-              </a>
-              <a className="enter-login ms-3" href="/login">
-                Login
-              </a>
-              <Dropdown isOpen={dropdownOpen} toggle={togglee} {...props}>
-                <DropdownToggle color="danger" size="sm">
-                  User Name
-                </DropdownToggle>
-                <DropdownMenu dark>
-                  <DropdownItem>
-                    <a className="enter-store" href="/store-management">
-                      Mağazaya Giriş
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>LogOut</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+
+              {!appState.user.token && (
+                <div className="right-side-menu-btns ms-auto">
+                  <a className="enter-register  me-3" href="/register-user">
+                    Register
+                  </a>
+                  <Button
+                    onClick={() => {
+                      Navigate("/login")
+                    }}
+                  >
+                    Login
+                  </Button>
+                </div>
+              )}
+              {appState.user.token && (
+                <Dropdown className="right-side-menu ms-auto" isOpen={dropdownOpen} toggle={togglee} {...props}>
+                  <DropdownToggle color="danger" size="sm">
+                    {appState.user.name}
+                  </DropdownToggle>
+                  <DropdownMenu dark>
+                    <DropdownItem>
+                      <a className="enter-store" href="/store-management">
+                        Mağazaya Giriş
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => {
+                        logoutHandler()
+                      }}
+                    >
+                      LogOut
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             </Collapse>
           </Navbar>
         </Container>

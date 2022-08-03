@@ -8,13 +8,12 @@ export const userRegister = async (name, email, password, password_confirmation)
 }
 export const userLogin = async (email, password) => {
   return await Axios.post("auth/login", { email, password }).then((response) => {
-    var decoded = getToken(response.data.access_token.token)
     localStorage.setItem("token", response.data.access_token.token)
-    localStorage.setItem("name", decoded.name)
-    localStorage.setItem("id", decoded.sub)
-    localStorage.setItem("store_id", decoded.store_id)
-    localStorage.setItem("user_spec", decoded.user_spec)
-    console.log(decoded)
+    var decoded = getToken(localStorage.getItem("token"))
+    let localObj = { id: decoded.sub, name: decoded.name, user_spec: decoded.user_spec, store_id: decoded.store_id }
+    localStorage.setItem("userData", JSON.stringify(localObj))
+
+    console.log(response)
   })
 }
 export const userLogout = async (token) => {
@@ -28,6 +27,7 @@ export const userLogout = async (token) => {
     }
   ).then((response) => {
     console.log(response)
-    localStorage.setItem("token", response.access_token.token)
+    localStorage.removeItem("token")
+    localStorage.removeItem("userData")
   })
 }

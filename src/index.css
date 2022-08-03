@@ -1,19 +1,37 @@
 #root {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 .footer {
   margin-top: auto;
 }
-.enter-store {
-  text-decoration: none;
-  color: aliceblue;
-}
-.enter-store:hover {
-  color: aliceblue;
-}
+
 .navbar-btns a {
   text-decoration: none;
   color: black;
+}
+.enter-store {
+  text-decoration: none;
+  color: aliceblue !important;
+}
+.enter-store:hover {
+  color: aliceblue !important;
+}
+#root > .login {
+  height: 88vh !important;
+}
+.admin .nav-tabs a {
+  cursor: pointer !important;
+  transition: 200ms;
+}
+.admin .nav-tabs a.active {
+  background-color: coral;
+  color: aliceblue;
+}
+.text-bold {
+  font-weight: 700;
+}
+.category-list .cat-tr {
+  cursor: cell;
 }
