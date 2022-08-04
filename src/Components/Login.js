@@ -10,12 +10,14 @@ import { takeToken, takeTokenData } from "../Stores/userStore"
 function Login() {
   const Navigate = useNavigate()
   const Dispatch = useDispatch()
-  const appState = useSelector((state) => state.user)
+  const appState = useSelector((state) => state)
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   })
-  appState.user.isLogin && Navigate("/")
+  useEffect(() => {
+    appState.user.isLogin && Navigate("/")
+  }, [])
 
   function loginHandler() {
     userLogin(loginData.email, loginData.password).then(() => {
@@ -23,7 +25,7 @@ function Login() {
 
       Dispatch(takeTokenData(JSON.parse(localStorage.getItem("userData"))))
     })
-    console.log(appState)
+    console.log(appState.user)
   }
 
   return (

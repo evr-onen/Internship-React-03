@@ -7,8 +7,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { takeMainCats, takeSubCats } from "../Stores/catStore"
 function CatTable() {
   const Dispatch = useDispatch()
-  const appState = useSelector((state) => state.user)
-  const catState = useSelector((state) => state.cat)
+  const appState = useSelector((state) => state)
   useEffect(() => {
     getCats(appState.user.token).then(() => {
       console.log(categoryRes.data)
@@ -20,9 +19,10 @@ function CatTable() {
       })
 
       Dispatch(takeMainCats(main))
-      console.log(catState)
+      console.log(appState)
     })
   }, [])
+
   return (
     <div className="d-flex mt-5 justify-content-around">
       <Table hover size="sm" className="w-25 border-1">

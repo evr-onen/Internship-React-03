@@ -21,27 +21,27 @@ const user = createSlice({
       state.user.token = action.payload
     },
     takeTokenData: (state, action) => {
-      state.user.id = action.payload.id
-      state.user.name = action.payload.name
-      state.user.userSpec = action.payload.user_spec
-      state.user.isLogin = true
-      state.user.store_id = action.payload.store_id
+      state.id = action.payload.id
+      state.name = action.payload.name
+      state.userSpec = action.payload.user_spec
+      state.isLogin = true
+      state.store_id = action.payload.store_id
     },
     removeTokenData: (state, action) => {
-      state.user.id = ""
-      state.user.name = ""
-      state.user.userSpec = 3
-      state.user.isLogin = false
-      state.user.store_id = 0
-      state.user.token = ""
+      state.id = ""
+      state.name = ""
+      state.userSpec = 3
+      state.isLogin = false
+      state.store_id = 0
+      state.token = ""
     },
     setDataLocaltoState: (state, action) => {
-      state.user.token = action.payload
-      state.user.id = getToken(action.payload).sub
-      state.user.name = getToken(action.payload).name
-      state.user.userSpec = getToken(action.payload).user_spec
-      state.user.isLogin = getToken(action.payload).sub ? true : false
-      state.user.store_id = getToken(action.payload).store_id
+      state.token = action.payload
+      state.id = getToken(action.payload).sub
+      state.name = getToken(action.payload).name
+      state.userSpec = getToken(action.payload).user_spec
+      state.isLogin = getToken(action.payload).sub ? true : false
+      state.store_id = getToken(action.payload).store_id
     },
   },
 })

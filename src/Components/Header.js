@@ -10,7 +10,7 @@ import { removeTokenData } from "../Stores/userStore"
 function Header(props) {
   const Navigate = useNavigate()
   const Dispatch = useDispatch()
-  const appState = useSelector((state) => state.user)
+  const appState = useSelector((state) => state)
 
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => setIsOpen(!isOpen)

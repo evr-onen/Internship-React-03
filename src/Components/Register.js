@@ -13,7 +13,7 @@ function Register() {
     password: "",
     password_confirmation: "",
   })
-  const appState = useSelector((state) => state.user)
+  const appState = useSelector((state) => state)
 
   useEffect(() => {
     appState.user.isLogin && Navigate("/")

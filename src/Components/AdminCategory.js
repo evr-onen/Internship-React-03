@@ -14,7 +14,7 @@ function AdminCategory(args) {
   const toggle2 = () => setModal2(!modal2)
 
   const [catNameValue, setCatNameValue] = useState()
-  const appState = useSelector((state) => state.user)
+  const appState = useSelector((state) => state)
 
   function mainCatHandler() {
     catCreate(appState.user.token, catNameValue, 0).then(() => {

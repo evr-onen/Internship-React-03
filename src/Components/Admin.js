@@ -7,7 +7,7 @@ import AdminCategory from "./AdminCategory"
 
 function Admin() {
   const [activeTab, setActiveTab] = useState("1")
-  const appState = useSelector((state) => state.user)
+  const appState = useSelector((state) => state)
 
   return (
     <div className="admin container">
