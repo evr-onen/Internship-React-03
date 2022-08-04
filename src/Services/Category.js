@@ -1,8 +1,36 @@
 import Axios from "axios"
-
-export const userLogout = async (token) => {
+export let res
+export let categoryRes
+export const catCreate = async (token, name, mainId) => {
   return await Axios.post(
-    "auth/logout",
+    "category/",
+    { name, main_id: mainId },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  ).then((response) => {
+    console.log(response)
+    res = response
+  })
+}
+export const catUpdate = async (token, name, mainId, id) => {
+  await Axios.post(
+    `category/${id}`,
+    { name, main_id: mainId },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  ).then((response) => {
+    return console.log(response)
+  })
+}
+export const catDestroy = async (token, id) => {
+  return await Axios.post(
+    `category/${id}`,
     {},
     {
       headers: {
@@ -11,7 +39,19 @@ export const userLogout = async (token) => {
     }
   ).then((response) => {
     console.log(response)
-    localStorage.removeItem("token")
-    localStorage.removeItem("userData")
+  })
+}
+export const getCats = async (token) => {
+  return await Axios.get(
+    `category/categories`,
+    {},
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  ).then((response) => {
+    console.log(response)
+    categoryRes = response
   })
 }

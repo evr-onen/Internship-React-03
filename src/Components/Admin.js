@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from "reactstrap"
 
+import { useSelector } from "react-redux"
+
 import AdminCategory from "./AdminCategory"
 
 function Admin() {
   const [activeTab, setActiveTab] = useState("1")
+  const appState = useSelector((state) => state.user)
 
   return (
     <div className="admin container">
