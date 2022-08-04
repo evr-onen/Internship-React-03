@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+
+import { useSelector, useDispatch } from "react-redux"
+import { countAddMain } from "../Stores/catStore"
 
 import { Modal, Button, ModalHeader, ModalBody, ModalFooter, Label, Input, FormGroup } from "reactstrap"
-import CatTable from "./CatTable"
 
+import CatTable from "./CatTable"
 import { catCreate, res } from "../Services/Category"
 
 function AdminCategory(args) {
@@ -13,7 +15,9 @@ function AdminCategory(args) {
   const toggle1 = () => setModal1(!modal1)
   const toggle2 = () => setModal2(!modal2)
 
-  const [catNameValue, setCatNameValue] = useState()
+  const Dispatch = useDispatch()
+
+  const [catNameValue, setCatNameValue] = useState("")
   const appState = useSelector((state) => state)
 
   function mainCatHandler() {
@@ -21,12 +25,21 @@ function AdminCategory(args) {
       if (res.status == 200) {
         setModal1(!modal1)
         setCatNameValue("")
+        Dispatch(countAddMain())
       } else {
         console.log("catCreate fail")
       }
     })
   }
-
+  function selectMainList() {
+    return appState.cat.main?.map((item, index) => {
+      return (
+        <option key={index} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
   return (
     <>
       <div className="">
@@ -77,7 +90,11 @@ function AdminCategory(args) {
           <ModalHeader toggle={toggle2}></ModalHeader>
           <ModalBody>
             <h6 className="text-center text-bold">Create Sub Category</h6>
-            <div className="d-flex justify-content-around align-items-center">
+            <div className="d-flex flex-column justify-content-around align-items-center">
+              <Input className="mb-3" type="select" className="w-50 ">
+                <option>Select Main menu</option>
+                {selectMainList()}
+              </Input>
               <FormGroup floating className="mt-2">
                 <Input id="subcat-modal-input" name="name" placeholder="Name" type="text" />
                 <Label size="sm" for="subcat-modal-input">

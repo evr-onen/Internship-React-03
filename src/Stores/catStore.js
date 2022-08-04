@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  cat: {
-    main: {},
-    sub: {},
-  },
+  main: [],
+  sub: [],
+  maincounter: 0,
 }
 
 const cat = createSlice({
@@ -12,13 +11,16 @@ const cat = createSlice({
   initialState,
   reducers: {
     takeMainCats: (state, action) => {
-      state.cat.main = action.payload
+      state.main = action.payload
     },
     takeSubCats: (state, action) => {
-      state.cat.sub = action.payload
+      state.sub = action.payload
+    },
+    countAddMain: (state, action) => {
+      state.maincounter += 1
     },
   },
 })
 
-export const { takeMainCats, takeSubCats } = cat.actions
+export const { takeMainCats, takeSubCats, countAddMain } = cat.actions
 export default cat.reducer

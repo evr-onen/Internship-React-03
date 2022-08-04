@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { Navbar, Button, Nav, DropdownToggle, DropdownMenu, Dropdown, DropdownItem, Container, Collapse, NavbarToggler, NavItem, NavLink, NavbarBrand } from "reactstrap"
 
 import { userLogout } from "../Services/auth"
-import { removeTokenData } from "../Stores/userStore"
+import { removeTokenData, counterLogin } from "../Stores/userStore"
 
 function Header(props) {
   const Navigate = useNavigate()
@@ -18,9 +18,33 @@ function Header(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const togglee = () => setDropdownOpen((prevState) => !prevState)
 
+  const changeBtns = () => {
+    return (
+      !appState.user.token && (
+        <div className="right-side-menu-btns ms-auto">
+          <a className="enter-register  me-3" href="/register-user">
+            Register
+          </a>
+          <Button
+            onClick={() => {
+              Navigate("/login")
+            }}
+          >
+            Login
+          </Button>
+        </div>
+      )
+    )
+  }
+
+  useEffect(() => {
+    changeBtns()
+  }, [appState.cat.loginCounter])
+
   function logoutHandler() {
     userLogout(appState.user.token)
     Dispatch(removeTokenData())
+    Dispatch(counterLogin())
     console.log(appState.user)
   }
   return (
@@ -47,20 +71,7 @@ function Header(props) {
                 </NavItem>
               </Nav>
 
-              {!appState.user.token && (
-                <div className="right-side-menu-btns ms-auto">
-                  <a className="enter-register  me-3" href="/register-user">
-                    Register
-                  </a>
-                  <Button
-                    onClick={() => {
-                      Navigate("/login")
-                    }}
-                  >
-                    Login
-                  </Button>
-                </div>
-              )}
+              {changeBtns()}
               {appState.user.token && (
                 <Dropdown className="right-side-menu ms-auto" isOpen={dropdownOpen} toggle={togglee} {...props}>
                   <DropdownToggle color="danger" size="sm">

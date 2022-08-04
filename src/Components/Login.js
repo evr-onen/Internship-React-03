@@ -17,7 +17,7 @@ function Login() {
   })
   useEffect(() => {
     appState.user.isLogin && Navigate("/")
-  }, [])
+  }, [appState.user.isLogin])
 
   function loginHandler() {
     userLogin(loginData.email, loginData.password).then(() => {

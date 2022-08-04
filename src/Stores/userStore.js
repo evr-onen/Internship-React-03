@@ -3,14 +3,13 @@ import getToken from "jwt-decode"
 import Thunk from "redux-thunk"
 
 const initialState = {
-  user: {
-    name: "",
-    id: "",
-    userSpec: 0,
-    isLogin: false,
-    token: "",
-    store_id: 0,
-  },
+  counter: 0,
+  name: "",
+  id: "",
+  userSpec: 0,
+  isLogin: false,
+  token: "",
+  store_id: 0,
 }
 
 const user = createSlice({
@@ -18,7 +17,7 @@ const user = createSlice({
   initialState,
   reducers: {
     takeToken: (state, action) => {
-      state.user.token = action.payload
+      state.token = action.payload
     },
     takeTokenData: (state, action) => {
       state.id = action.payload.id
@@ -43,8 +42,11 @@ const user = createSlice({
       state.isLogin = getToken(action.payload).sub ? true : false
       state.store_id = getToken(action.payload).store_id
     },
+    counterLogin: (state, action) => {
+      state.counter += 1
+    },
   },
 })
 
-export const { takeToken, takeTokenData, removeTokenData, setDataLocaltoState } = user.actions
+export const { takeToken, takeTokenData, removeTokenData, setDataLocaltoState, counterLogin } = user.actions
 export default user.reducer
