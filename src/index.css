@@ -35,3 +35,18 @@
 .category-list .cat-tr {
   cursor: cell;
 }
+.category-list > div > #mainTable {
+  width: 250px !important;
+}
+.category-list > div > #subTable {
+  width: 450px !important;
+}
+.container.store-app .wrapper {
+  width: 100%;
+
+  overflow: hidden;
+  text-align: center;
+}
+.container.store-app .wrapper img {
+  width: 100%;
+}

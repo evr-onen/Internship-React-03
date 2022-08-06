@@ -2,10 +2,10 @@ import Axios from "axios"
 export let res
 export let categoryRes
 
-export const catCreate = async (token, name, mainId) => {
+export const storeCreate = async (token, name, email, address, phone, user_id) => {
   return await Axios.post(
-    "category/",
-    { name, main_id: mainId },
+    "store/",
+    { name, email, address, phone, status: 1, user_id },
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -17,10 +17,10 @@ export const catCreate = async (token, name, mainId) => {
   })
 }
 
-export const catUpdate = async (token, name, mainId, id) => {
-  await Axios.put(
-    `category/${id}`,
-    { name, main_id: mainId },
+export const storeUpdate = async (token, name, email, address, phone, id) => {
+  await Axios.post(
+    `store/${id}`,
+    { name, email, address, phone, status: 1 },
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -33,7 +33,7 @@ export const catUpdate = async (token, name, mainId, id) => {
 
 export const catDestroy = async (token, id) => {
   return await Axios.delete(
-    `category/${id}`,
+    `store/${id}`,
     {},
     {
       headers: {
@@ -45,9 +45,23 @@ export const catDestroy = async (token, id) => {
   })
 }
 
-export const getCats = async (token) => {
+export const getStores = async (token) => {
   return await Axios.get(
-    `category/categories`,
+    `store/stores`,
+    {},
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  ).then((response) => {
+    console.log(response)
+    categoryRes = response
+  })
+}
+export const getPendingStores = async (token) => {
+  return await Axios.get(
+    `store/pending`,
     {},
     {
       headers: {

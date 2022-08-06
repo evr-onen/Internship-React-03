@@ -12,7 +12,9 @@ function AdminCategory(args) {
   const [modal1, setModal1] = useState(false)
   const [modal2, setModal2] = useState(false)
 
-  const toggle1 = () => setModal1(!modal1)
+  const toggle1 = () => {
+    setModal1(!modal1)
+  }
   const toggle2 = () => setModal2(!modal2)
 
   const Dispatch = useDispatch()
@@ -20,10 +22,11 @@ function AdminCategory(args) {
   const [catNameValue, setCatNameValue] = useState("")
   const appState = useSelector((state) => state)
 
-  function mainCatHandler() {
-    catCreate(appState.user.token, catNameValue, 0).then(() => {
+  function catHandler(mainId = 0) {
+    catCreate(appState.user.token, catNameValue, mainId).then(() => {
       if (res.status == 200) {
-        setModal1(!modal1)
+        setModal1(false)
+        setModal2(false)
         setCatNameValue("")
         Dispatch(countAddMain())
       } else {
@@ -78,7 +81,7 @@ function AdminCategory(args) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={() => mainCatHandler()}>
+            <Button color="primary" onClick={() => catHandler()}>
               Create!!
             </Button>
             <Button color="secondary" onClick={toggle1}>
@@ -91,12 +94,21 @@ function AdminCategory(args) {
           <ModalBody>
             <h6 className="text-center text-bold">Create Sub Category</h6>
             <div className="d-flex flex-column justify-content-around align-items-center">
-              <Input className="mb-3" type="select" className="w-50 ">
+              <Input className="mb-3 w-50 selectMainCat" type="select">
                 <option>Select Main menu</option>
                 {selectMainList()}
               </Input>
               <FormGroup floating className="mt-2">
-                <Input id="subcat-modal-input" name="name" placeholder="Name" type="text" />
+                <Input
+                  id="subcat-modal-input"
+                  name="name"
+                  placeholder="Name"
+                  type="text"
+                  value={catNameValue}
+                  onChange={(e) => {
+                    setCatNameValue(e.target.value)
+                  }}
+                />
                 <Label size="sm" for="subcat-modal-input">
                   Name
                 </Label>
@@ -104,7 +116,12 @@ function AdminCategory(args) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={toggle2}>
+            <Button
+              color="primary"
+              onClick={(e) => {
+                catHandler(e.target.parentElement.previousElementSibling.querySelector(".selectMainCat").value)
+              }}
+            >
               Create!!
             </Button>
             <Button color="secondary" onClick={toggle2}>
