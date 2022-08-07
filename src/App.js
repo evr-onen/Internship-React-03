@@ -14,6 +14,8 @@ import StoreApp from "./Components/StoreApp"
 import StoreManagement from "./Components/StoreManagement"
 import Register from "./Components/Register"
 
+import { PrivateRoutes } from "./PrivateRoutes"
+
 Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
 
 function App() {
@@ -29,10 +31,13 @@ function App() {
         <Route path="/" element={<FrontPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product" element={<SingleProduct />} />
-        <Route path="/admin" element={<Admin />} />
+        {/* <Route path="/admin" element={<Admin />} /> */}
         <Route path="/store-application" element={<StoreApp />} />
         <Route path="/store-management" element={<StoreManagement />} />
         <Route path="/register-user" element={<Register />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path="/admin" element={<Admin />} />
+        </Route>
       </Routes>
       <Footer />
     </BrowserRouter>

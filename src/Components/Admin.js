@@ -4,6 +4,7 @@ import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from "reactstrap
 import { useSelector } from "react-redux"
 
 import AdminCategory from "./AdminCategory"
+import AdminStore from "./AdminStore"
 
 function Admin() {
   const [activeTab, setActiveTab] = useState("1")
@@ -28,7 +29,7 @@ function Admin() {
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink className={activeTab == "4" ? "active" : ""} onClick={() => setActiveTab("4")}>
+          <NavLink id="storeContentTabBtn" className={activeTab == "4" ? "active" : ""} onClick={() => setActiveTab("4")}>
             Stores
           </NavLink>
         </NavItem>
@@ -39,7 +40,9 @@ function Admin() {
         <TabPane tabId="3">
           <AdminCategory />
         </TabPane>
-        <TabPane tabId="4">Stores Content</TabPane>
+        <TabPane tabId="4" className={activeTab == "4" ? "d-flex" : ""}>
+          <AdminStore />
+        </TabPane>
       </TabContent>
     </div>
   )

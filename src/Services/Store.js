@@ -1,6 +1,6 @@
 import Axios from "axios"
 export let res
-export let categoryRes
+export let allStoresRes
 
 export const storeCreate = async (token, name, email, address, phone, user_id) => {
   return await Axios.post(
@@ -47,7 +47,7 @@ export const catDestroy = async (token, id) => {
 
 export const getStores = async (token) => {
   return await Axios.get(
-    `store/stores`,
+    `store/`,
     {},
     {
       headers: {
@@ -56,13 +56,13 @@ export const getStores = async (token) => {
     }
   ).then((response) => {
     console.log(response)
-    categoryRes = response
+    allStoresRes = response
   })
 }
-export const getPendingStores = async (token) => {
-  return await Axios.get(
-    `store/pending`,
-    {},
+export const acceptStore = async (token, id, user_id) => {
+  return await Axios.post(
+    `store/pending/${id}`,
+    { user_id: user_id },
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -70,6 +70,5 @@ export const getPendingStores = async (token) => {
     }
   ).then((response) => {
     console.log(response)
-    categoryRes = response
   })
 }

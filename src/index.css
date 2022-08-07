@@ -32,7 +32,8 @@
 .text-bold {
   font-weight: 700;
 }
-.category-list .cat-tr {
+.category-list .cat-tr,
+#storePendingItems {
   cursor: cell;
 }
 .category-list > div > #mainTable {
