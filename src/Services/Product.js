@@ -1,9 +1,9 @@
 import Axios from "axios"
 
-export const productCreate = async (token, name, email, address, phone, user_id) => {
+export const productCreate = async (token, name, description, cat_id, file1, file2, file3) => {
   return await Axios.post(
-    "store/",
-    { name, email, address, phone, status: 1, user_id },
+    "product/",
+    { name, description, cat_id, file1, file2, file3 },
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -11,7 +11,6 @@ export const productCreate = async (token, name, email, address, phone, user_id)
     }
   ).then((response) => {
     console.log(response)
-    res = response
   })
 }
 
@@ -54,6 +53,5 @@ export const getProducts = async (token) => {
     }
   ).then((response) => {
     console.log(response)
-    allStoresRes = response
   })
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux/"
 
+import { productCreate } from "../Services/Product"
+
 import { Modal, FormGroup, ModalHeader, ModalBody, ModalFooter, Button, Label, Input } from "reactstrap"
 
 function AdminProduct(args) {
@@ -14,10 +16,12 @@ function AdminProduct(args) {
   }
   const [product, setProduct] = useState({
     name: "",
-    stock: 0,
-    category: "",
-    price: 0,
+    description: "lorem ipsum",
+    cat_id: 0,
   })
+  const [file1, setFile1] = useState()
+  const [file2, setFile2] = useState()
+  const [file3, setFile3] = useState()
   function selectMainList() {
     return AppState.cat.main?.map((item, index) => {
       return (
@@ -37,9 +41,7 @@ function AdminProduct(args) {
       )
     })
   }
-
-  function productHandler() {}
-
+  console.log(file2)
   const allforMain = (k) => {
     let items = document.querySelectorAll(".new-product-images > .item")
     console.log(items)
@@ -48,7 +50,20 @@ function AdminProduct(args) {
     })
     items[k].classList.add("main-img")
   }
+  function createProduct() {
+    document.querySelectorAll(".new-product-images > .item").forEach((item) => {
+      if (item.classList.contains("main-img")) {
+        setFile1(item.querySelector("input").files[0])
+        console.log(file1)
+      } else {
+        file2 === undefined ? setFile2(item.querySelector("input").files[0]) : setFile3(item.querySelector("input").files[0])
+        console.log(file2)
+        console.log(file3)
+      }
+    })
 
+    productCreate(AppState.user.token, product.name, product.description, product.cat_id, file1, file2, file3)
+  }
   return (
     <div className="container admin-product">
       <div className="top-sectioncreate-product-modal d-flex justify-content-center mt-5 w-100">
@@ -67,12 +82,28 @@ function AdminProduct(args) {
                 <option>Select Main Category</option>
                 {selectMainList()}
               </Input>
-              <Input className="mb-3 w-100 selectMainCat" type="select">
+              <Input
+                className="mb-3 w-100 selectMainCat"
+                value={product.cat_id}
+                type="select"
+                onChange={(e) => {
+                  setProduct((prev) => ({ ...prev, cat_id: e.target.value }))
+                }}
+              >
                 <option>Select Sub Category</option>
                 {selectSubList()}
               </Input>
               <FormGroup floating className="mt-2">
-                <Input id="newproduct-name" name="name" placeholder="Name" type="text" />
+                <Input
+                  id="newproduct-name"
+                  name="name"
+                  placeholder="Name"
+                  value={product.name}
+                  type="text"
+                  onChange={(e) => {
+                    setProduct((prev) => ({ ...prev, name: e.target.value }))
+                  }}
+                />
                 <Label size="sm" for="newproduct-name">
                   Name
                 </Label>
@@ -129,7 +160,7 @@ function AdminProduct(args) {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => productHandler()}>
+          <Button color="primary" onClick={() => createProduct()}>
             Create!!
           </Button>
           <Button color="secondary" onClick={toggle1}>
