@@ -40,20 +40,20 @@ function AdminProduct(args) {
 
   function productHandler() {}
 
-  const allforMain = (aaa) => {
-    let items = document.querySelectorAll(".new-product-images > item")
+  const allforMain = (k) => {
+    let items = document.querySelectorAll(".new-product-images > .item")
     console.log(items)
     items.forEach((item) => {
       item.classList.remove("main-img")
     })
-    items[aaa].classList.add("main-img")
+    items[k].classList.add("main-img")
   }
 
   return (
     <div className="container admin-product">
       <div className="top-sectioncreate-product-modal d-flex justify-content-center mt-5 w-100">
         <Button color="danger" onClick={toggle1}>
-          Click Me
+          Create Product
         </Button>
       </div>
 
@@ -90,7 +90,7 @@ function AdminProduct(args) {
                   />
                   <img src={proImg1} />
                 </label>
-                <div className="item-btn" color="primary" click={() => allforMain(0)}>
+                <div className="item-btn" color="primary" onClick={() => allforMain(0)}>
                   Main
                 </div>
               </div>
@@ -105,7 +105,7 @@ function AdminProduct(args) {
                   />
                   <img src={proImg2} />
                 </label>
-                <div className="item-btn" color="primary" click={() => allforMain(1)}>
+                <div className="item-btn" color="primary" onClick={() => allforMain(1)}>
                   Main
                 </div>
               </div>
@@ -121,7 +121,7 @@ function AdminProduct(args) {
 
                   <img src={proImg3} />
                 </label>
-                <div className="item-btn" color="primary" click={() => allforMain(2)}>
+                <div className="item-btn" color="primary" onClick={() => allforMain(2)}>
                   Main
                 </div>
               </div>

@@ -59,7 +59,7 @@
 }
 .create-product-modal .new-product-images .item {
   order: 5;
-  transition: 1000ms;
+
   display: flex;
   flex-direction: column;
 }
@@ -72,6 +72,9 @@
   margin: 10px auto;
   cursor: pointer;
   color: aliceblue;
+}
+.create-product-modal .new-product-images .item.main-img .item-btn {
+  display: none;
 }
 .create-product-modal .new-product-images label + label {
   margin-left: 15px;
