@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 
 import AdminCategory from "./AdminCategory"
 import AdminStore from "./AdminStore"
+import AdminProduct from "./AdminProduct"
 
 function Admin() {
   const [activeTab, setActiveTab] = useState("1")
@@ -36,7 +37,9 @@ function Admin() {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">Dashboard Content</TabPane>
-        <TabPane tabId="2">Product Content</TabPane>
+        <TabPane tabId="2">
+          <AdminProduct />
+        </TabPane>
         <TabPane tabId="3">
           <AdminCategory />
         </TabPane>

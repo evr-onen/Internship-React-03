@@ -51,3 +51,40 @@
 .container.store-app .wrapper img {
   width: 100%;
 }
+.create-product-modal .new-product-images {
+  display: flex;
+}
+.create-product-modal .new-product-images .item.main-img {
+  order: 1 !important;
+}
+.create-product-modal .new-product-images .item {
+  order: 5;
+  transition: 1000ms;
+  display: flex;
+  flex-direction: column;
+}
+.create-product-modal .new-product-images .item .item-btn {
+  width: 60px;
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: crimson;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  margin: 10px auto;
+  cursor: pointer;
+  color: aliceblue;
+}
+.create-product-modal .new-product-images label + label {
+  margin-left: 15px;
+}
+.create-product-modal .new-product-images label {
+  width: 150px;
+  height: 150px;
+  border: 2px solid black;
+  overflow: hidden;
+}
+.create-product-modal .new-product-images label img {
+  width: 100%;
+}
+.create-product-modal .new-product-images input {
+  display: none;
+}
