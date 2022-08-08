@@ -16,9 +16,10 @@ function StoreApplication() {
     phone: "",
     status: "",
   })
+  console.log(AppState.user)
   const Navigate = useNavigate()
   function SubmitHandler(e) {
-    storeCreate(AppState.user.token, appFormData.name, appFormData.email, appFormData.address, appFormData.phone, 5)
+    storeCreate(AppState.user.token, appFormData.name, appFormData.email, appFormData.address, appFormData.phone, AppState.user.id)
       .then(() => {
         setAppFormData({
           name: "",

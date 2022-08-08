@@ -15,6 +15,7 @@ function AdminStore(args) {
   const [modal1, setModal1] = useState(false)
   const [theStore, setTheStore] = useState({})
   const toggle1 = () => setModal1(!modal1)
+
   useEffect(() => {
     getStores(AppState.user.token).then(() => {
       allStoresRes.data.map((item, index) => {
@@ -26,6 +27,7 @@ function AdminStore(args) {
       })
 
       Dispatch(takePendingStores(storePending))
+      console.log(storePending)
       Dispatch(takeDependingStores(storeDepending))
     })
     storePending = []
@@ -45,6 +47,7 @@ function AdminStore(args) {
       )
     })
   }
+  console.log(AppState.stores.depending)
   const dependingStoresList = () => {
     return AppState.stores.depending?.map((item, index) => {
       return (
