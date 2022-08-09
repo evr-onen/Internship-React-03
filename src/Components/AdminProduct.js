@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux/"
-
+import { useSelector, useDispatch } from "react-redux/"
+import { closeModal } from "../Stores/FreeStyle"
 import { productCreate } from "../Services/Product"
 
 import { Modal, FormGroup, ModalHeader, ModalBody, ModalFooter, Button, Label, Input } from "reactstrap"
 
+import ProductsTable from "./ProductsTable"
 function AdminProduct(args) {
   const AppState = useSelector((state) => state)
+  const Dispatch = useDispatch()
   const [modal1, setModal1] = useState(false)
   const [proImg1, setProImg1] = useState()
   const [proImg2, setProImg2] = useState()
   const [proImg3, setProImg3] = useState()
   const toggle1 = () => {
     setModal1(!modal1)
+    Dispatch(closeModal())
   }
   const [product, setProduct] = useState({
     name: "",
     description: "lorem ipsum",
     cat_id: 0,
   })
-  const [file1, setFile1] = useState()
-  const [file2, setFile2] = useState()
-  const [file3, setFile3] = useState()
+
   function selectMainList() {
     return AppState.cat.main?.map((item, index) => {
       return (
@@ -31,7 +32,7 @@ function AdminProduct(args) {
       )
     })
   }
-  console.log(AppState.cat)
+
   function selectSubList() {
     return AppState.cat.sub?.map((item, index) => {
       return (
@@ -41,11 +42,6 @@ function AdminProduct(args) {
       )
     })
   }
-  // let data = new FormData()
-  //   data.append("name", createName)
-  //   data.append("sub_category_id", createCatValue)
-  //   data.append("price", createPrice)
-  //   data.append("file", createFile)
 
   const allforMain = (k) => {
     let items = document.querySelectorAll(".new-product-images > .item")
@@ -60,7 +56,6 @@ function AdminProduct(args) {
     let fs = [],
       fsx = []
     let data = new FormData()
-
     document.querySelectorAll(".new-product-images > .item").forEach((item) => {
       if (item.classList.contains("main-img")) fsx.push(item.querySelector("input").files[0])
       else fs.push(item.querySelector("input").files[0])
@@ -78,8 +73,12 @@ function AdminProduct(args) {
     // for (var pair of data.entries()) {
     //   console.log(pair[0] + ", " + pair[1])
     // }
-    productCreate(AppState.user.token, data)
-  }
+    productCreate(AppState.user.token, product.name, product.description, product.cat_id, fsx[0], fsx[1], fsx[2])
+  } /* fsx[0], fsx[1], fsx[2] */
+  useEffect(() => {
+    setModal1(AppState.sheet.isModalopen)
+  }, [AppState.sheet.isModalopen])
+
   return (
     <div className="container admin-product">
       <div className="top-sectioncreate-product-modal d-flex justify-content-center mt-5 w-100">
@@ -87,7 +86,9 @@ function AdminProduct(args) {
           Create Product
         </Button>
       </div>
-
+      <div className="products-table d-flex justify-content-center align-self-center">
+        <ProductsTable />
+      </div>
       <Modal className="create-product-modal" isOpen={modal1} toggle={toggle1} {...args}>
         <ModalHeader toggle={toggle1}></ModalHeader>
         <ModalBody>

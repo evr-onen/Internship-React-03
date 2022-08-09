@@ -1,16 +1,15 @@
 import Axios from "axios"
 
-export const productCreate = async (token, data) => {
+export let getallproducts = []
+export const productCreate = async (token, name, description, cat_id, file1, file2, file3) => {
   return await Axios.post(
     "product/",
-    { data },
+    { name, description, cat_id, file1, file2, file3 },
     {
       headers: {
         Authorization: "Bearer " + token,
         "Content-Type": "multipart/form-data",
-        // accept: "multipart/form-data",
-        // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Credentials": false,
+        Accept: "application/json",
       },
     }
   ).then((response) => {
@@ -47,15 +46,16 @@ export const productDestroy = async (token, id) => {
 }
 
 export const getProducts = async (token) => {
-  return await Axios.get(
-    `store/`,
-    {},
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  ).then((response) => {
-    console.log(response)
+  return await Axios.get(`product/all`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
   })
+    .then((response) => {
+      getallproducts = response.data
+      console.log(response)
+    })
+    .catch((response) => {
+      console.log(response)
+    })
 }

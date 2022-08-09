@@ -27,7 +27,7 @@ function AdminStore(args) {
       })
 
       Dispatch(takePendingStores(storePending))
-      console.log(storePending)
+
       Dispatch(takeDependingStores(storeDepending))
     })
     storePending = []
@@ -47,7 +47,7 @@ function AdminStore(args) {
       )
     })
   }
-  console.log(AppState.stores.depending)
+
   const dependingStoresList = () => {
     return AppState.stores.depending?.map((item, index) => {
       return (

@@ -91,3 +91,26 @@
 .create-product-modal .new-product-images input {
   display: none;
 }
+.admin-product .products-table {
+  width: 100%;
+}
+.admin-product .products-table td {
+  height: 100%;
+}
+.admin-product .products-table .imgs-wrapper {
+  width: 150px;
+  height: 75px;
+  overflow: hidden;
+}
+.admin-product .products-table .imgs-wrapper img {
+  height: 100%;
+}
+.admin-product .products-table tr {
+  align-items: center;
+}
+.admin-product .products-table tbody tr {
+  cursor: cell;
+}
+.admin-product .products-table tr td:first-of-type {
+  display: flex;
+}
