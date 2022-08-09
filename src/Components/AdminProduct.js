@@ -41,7 +41,12 @@ function AdminProduct(args) {
       )
     })
   }
-  console.log(file2)
+  // let data = new FormData()
+  //   data.append("name", createName)
+  //   data.append("sub_category_id", createCatValue)
+  //   data.append("price", createPrice)
+  //   data.append("file", createFile)
+
   const allforMain = (k) => {
     let items = document.querySelectorAll(".new-product-images > .item")
     console.log(items)
@@ -50,19 +55,30 @@ function AdminProduct(args) {
     })
     items[k].classList.add("main-img")
   }
-  function createProduct() {
-    document.querySelectorAll(".new-product-images > .item").forEach((item) => {
-      if (item.classList.contains("main-img")) {
-        setFile1(item.querySelector("input").files[0])
-        console.log(file1)
-      } else {
-        file2 === undefined ? setFile2(item.querySelector("input").files[0]) : setFile3(item.querySelector("input").files[0])
-        console.log(file2)
-        console.log(file3)
-      }
-    })
 
-    productCreate(AppState.user.token, product.name, product.description, product.cat_id, file1, file2, file3)
+  function createProduct() {
+    let fs = [],
+      fsx = []
+    let data = new FormData()
+
+    document.querySelectorAll(".new-product-images > .item").forEach((item) => {
+      if (item.classList.contains("main-img")) fsx.push(item.querySelector("input").files[0])
+      else fs.push(item.querySelector("input").files[0])
+    })
+    for (let i in fs) {
+      fsx.push(fs[i])
+    }
+    data.append("file1", fsx[0])
+    data.append("file2", fsx[1])
+    data.append("file3", fsx[2])
+
+    data.append("name", product.name)
+    data.append("description", product.description)
+    data.append("cat_id", product.cat_id)
+    // for (var pair of data.entries()) {
+    //   console.log(pair[0] + ", " + pair[1])
+    // }
+    productCreate(AppState.user.token, data)
   }
   return (
     <div className="container admin-product">

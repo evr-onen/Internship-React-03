@@ -1,12 +1,16 @@
 import Axios from "axios"
 
-export const productCreate = async (token, name, description, cat_id, file1, file2, file3) => {
+export const productCreate = async (token, data) => {
   return await Axios.post(
     "product/",
-    { name, description, cat_id, file1, file2, file3 },
+    { data },
     {
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+        // accept: "multipart/form-data",
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": false,
       },
     }
   ).then((response) => {
