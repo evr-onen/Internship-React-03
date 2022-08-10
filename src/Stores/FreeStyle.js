@@ -14,6 +14,7 @@ const initialState = {
     paths: [],
   },
   isModalopen: false,
+  productCounter: 0,
 }
 
 const sheet = createSlice({
@@ -29,13 +30,16 @@ const sheet = createSlice({
       state.editModalData.cat.main_name = action.payload.cat.catmain_name
       state.editModalData.ids = action.payload.ids
       state.editModalData.paths = action.payload.paths
-      state.isModalopen = true
+      // state.isModalopen = true
     },
     closeModal: (state, action) => {
       state.isModalopen = false
     },
+    productCounter: (state, action) => {
+      state.productCounter += 1
+    },
   },
 })
 
-export const { editModalData, closeModal } = sheet.actions
+export const { editModalData, closeModal, productCounter } = sheet.actions
 export default sheet.reducer

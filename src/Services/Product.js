@@ -17,13 +17,15 @@ export const productCreate = async (token, name, description, cat_id, file1, fil
   })
 }
 
-export const productUpdate = async (token, name, email, address, phone, id) => {
+export const productUpdate = async (token, id, name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3) => {
   await Axios.post(
-    `store/${id}`,
-    { name, email, address, phone, status: 1 },
+    `product/${id}`,
+    { name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3 },
     {
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
       },
     }
   ).then((response) => {
@@ -33,8 +35,8 @@ export const productUpdate = async (token, name, email, address, phone, id) => {
 
 export const productDestroy = async (token, id) => {
   return await Axios.delete(
-    `store/${id}`,
-    {},
+    `product/${id}`,
+
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -53,9 +55,10 @@ export const getProducts = async (token) => {
   })
     .then((response) => {
       getallproducts = response.data
-      console.log(response)
+      console.log(getallproducts)
     })
     .catch((response) => {
       console.log(response)
+      // getallproducts = response.data
     })
 }
