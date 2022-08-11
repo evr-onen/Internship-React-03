@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { getStore, storeDataResp } from "../Services/Store"
 import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
 
 function FrontPage() {
+  const AppState = useSelector((state) => state)
+  getStore(AppState.user.token, AppState.user.store_id)
   return (
     <div>
       <div className="frontpage container d-flex">

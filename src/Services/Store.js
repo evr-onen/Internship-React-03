@@ -1,14 +1,16 @@
 import Axios from "axios"
-export let res
+export let res, storeDataResp
 export let allStoresRes
 
-export const storeCreate = async (token, name, email, address, phone, user_id) => {
+export const storeCreate = async (token, name, email, address, phone, user_id, banner, brand) => {
   return await Axios.post(
     "store/",
-    { name, email, address, phone, status: 1, user_id },
+    { name, email, address, phone, status: 1, user_id, banner, brand },
     {
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
       },
     }
   ).then((response) => {
@@ -57,6 +59,16 @@ export const getStores = async (token) => {
   ).then((response) => {
     console.log(response)
     allStoresRes = response
+  })
+}
+export const getStore = async (token, id) => {
+  return await Axios.get(`store/${id}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }).then((response) => {
+    console.log(response)
+    storeDataResp = response
   })
 }
 export const acceptStore = async (token, id, user_id) => {

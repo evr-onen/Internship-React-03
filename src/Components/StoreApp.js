@@ -15,11 +15,14 @@ function StoreApplication() {
     address: "",
     phone: "",
     status: "",
+    banner: [],
+    logo: [],
   })
 
   const Navigate = useNavigate()
   function SubmitHandler(e) {
-    storeCreate(AppState.user.token, appFormData.name, appFormData.email, appFormData.address, appFormData.phone, AppState.user.id)
+    console.log(appFormData)
+    storeCreate(AppState.user.token, appFormData.name, appFormData.email, appFormData.address, appFormData.phone, AppState.user.id, appFormData.banner, appFormData.logo)
       .then(() => {
         setAppFormData({
           name: "",
@@ -28,7 +31,7 @@ function StoreApplication() {
           phone: "",
           status: "",
         })
-        /* Navigate("/store-management") */
+        Navigate("/store-management")
       })
       .catch(() => {
         console.log("The store has not create!!")
@@ -40,67 +43,75 @@ function StoreApplication() {
       <h1 className="">Store Application</h1>
       <div className="form-wrapper">
         <Form>
-          <Row>
-            <Label for="exampleFile" sm={6}>
+          <div className="topSection">
+            <Label for="exampleFileBanner" sm={6}>
               <div className="wrapper">
                 <img src={storeImg} />
               </div>
             </Label>
-            <Label for="exampleFile" sm={6}>
+
+            <div className="line"></div>
+            <h1>{appFormData.name}</h1>
+            <Label for="exampleFileBrand" sm={6}>
               <div className="wrapper">
                 <img src={brandImg} />
               </div>
             </Label>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleEmail">Email</Label>
-                <Input id="exampleEmail" name="email" placeholder="email" type="email" value={appFormData.email} onChange={(e) => setAppFormData((prev) => ({ ...prev, email: e.target.value }))} />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleName">Name</Label>
-                <Input id="exampleName" name="name" placeholder="Your Name" type="text" value={appFormData.name} onChange={(e) => setAppFormData((prev) => ({ ...prev, name: e.target.value }))} />
-              </FormGroup>
-            </Col>
-            <Col md={5}>
-              <FormGroup>
-                <Label for="exampleAddress">Address</Label>
-                <Input id="exampleAddress" name="address" placeholder="1234 Main St" value={appFormData.address} onChange={(e) => setAppFormData((prev) => ({ ...prev, address: e.target.value }))} />
-              </FormGroup>
-            </Col>
-            <Col md={2}>
-              <FormGroup>
-                <Label for="exampleState">Phone</Label>
-                <Input id="exampleState" name="state" type="tel" value={appFormData.phone} onChange={(e) => setAppFormData((prev) => ({ ...prev, phone: e.target.value }))} />
-              </FormGroup>
-            </Col>
+          </div>
+
+          <Row>
+            <div className="form">
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleEmail">Email</Label>
+                  <Input id="exampleEmail" name="email" placeholder="email" type="email" value={appFormData.email} onChange={(e) => setAppFormData((prev) => ({ ...prev, email: e.target.value }))} />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleName">Name</Label>
+                  <Input id="exampleName" name="name" placeholder="Your Name" type="text" value={appFormData.name} onChange={(e) => setAppFormData((prev) => ({ ...prev, name: e.target.value }))} maxLength="30" />
+                </FormGroup>
+              </Col>
+              <Col md={5}>
+                <FormGroup>
+                  <Label for="exampleAddress">Address</Label>
+                  <Input id="exampleAddress" name="address" placeholder="1234 Main St" value={appFormData.address} onChange={(e) => setAppFormData((prev) => ({ ...prev, address: e.target.value }))} />
+                </FormGroup>
+              </Col>
+              <Col md={2}>
+                <FormGroup>
+                  <Label for="exampleState">Phone</Label>
+                  <Input id="exampleState" name="state" type="tel" value={appFormData.phone} onChange={(e) => setAppFormData((prev) => ({ ...prev, phone: e.target.value }))} />
+                </FormGroup>
+              </Col>
+            </div>
           </Row>
 
           <FormGroup row>
             <Col sm={5}>
               <Input
-                id="exampleFile"
+                id="exampleFileBanner"
                 name="file"
                 type="file"
                 onChange={(e) => {
                   setStoreImg(URL.createObjectURL(e.target.files[0]))
+                  setAppFormData((prev) => ({ ...prev, banner: e.target.files[0] }))
                 }}
               />
-              <FormText>Store Banner Image</FormText>
             </Col>
           </FormGroup>
           <FormGroup row>
             <Col sm={5}>
               <Input
-                id="exampleFile"
+                id="exampleFileBrand"
                 name="file"
                 type="file"
                 onChange={(e) => {
                   setBrandImg(URL.createObjectURL(e.target.files[0]))
+                  setAppFormData((prev) => ({ ...prev, logo: e.target.files[0] }))
                 }}
               />
-              <FormText>Store Brand Image</FormText>
             </Col>
           </FormGroup>
           <FormGroup check>

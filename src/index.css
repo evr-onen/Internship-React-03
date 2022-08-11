@@ -42,15 +42,51 @@
 .category-list > div > #subTable {
   width: 450px !important;
 }
-.container.store-app .wrapper {
+.store-app form .topSection {
+  position: relative;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+.store-app form .topSection > label {
+  border: 3px solid red;
+  padding: 0;
+}
+.store-app form .topSection > label:first-of-type {
+  height: 250px;
   width: 100%;
-
+}
+.store-app form .topSection > label:nth-of-type(2) {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  bottom: 25%;
+  left: 15px;
+  z-index: 10;
+  background-color: aliceblue;
+}
+.store-app form .topSection div.line {
+  position: absolute;
+  top: 65%;
+  border: 3px solid rgb(255, 255, 255);
+  width: 100%;
+}
+.store-app form .topSection h1 {
+  position: absolute;
+  top: 65%;
+  left: 35%;
+}
+.store-app form input[type="file"] {
+  display: none;
+}
+.container.store-app .wrapper {
   overflow: hidden;
-  text-align: center;
+  height: 100%;
 }
 .container.store-app .wrapper img {
   width: 100%;
 }
+
 .create-product-modal .new-product-images {
   display: flex;
 }
@@ -113,4 +149,77 @@
 }
 .admin-product .products-table tr td:first-of-type {
   display: flex;
+}
+.store-management .topSection {
+  height: 250px;
+  width: 100%;
+  background-color: aqua;
+  position: relative;
+  border: 1px solid black;
+}
+.store-management .topSection > label {
+  padding: 0;
+}
+.store-management .topSection > label:first-of-type {
+  height: 250px;
+  width: 100%;
+}
+.store-management .topSection > label:nth-of-type(2) {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  bottom: 25%;
+  left: 15px;
+  z-index: 10;
+  background-color: aliceblue;
+}
+.store-management .topSection > label:nth-of-type(2) .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.store-management .topSection div.line {
+  position: absolute;
+  top: 65%;
+  border: 3px solid rgb(255, 255, 255);
+  width: 100%;
+}
+.store-management .topSection h1 {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  color: aliceblue;
+}
+.store-management input[type="file"] {
+  display: none;
+}
+.container.store-management .wrapper {
+  overflow: hidden;
+  height: 100%;
+}
+.container.store-management .wrapper img {
+  width: 100%;
+
+  display: block;
+  background-color: aliceblue;
+}
+/* .container.store-management .wrapper img:nth-of-type(2) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+} */
+.store-lists ul li {
+  cursor: pointer;
+}
+.store-management .topSection .imageSaveBtns {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  width: 125px;
+  display: flex;
+  justify-content: space-between;
+
+  transition: 500ms;
 }
