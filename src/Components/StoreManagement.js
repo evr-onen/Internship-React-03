@@ -50,7 +50,12 @@ function StoreManagement(args) {
   const storeProductList = () => {
     return AppState.storeproduct.storedProducts?.map((item, index) => {
       return (
-        <tr key={index} onClick={editModal()}>
+        <tr
+          key={index}
+          onClick={() => {
+            editModal(item.product_id, item.price, item.stock, item.id)
+          }}
+        >
           <th scope="row">{index + 1}</th>
           <td>{item.store_to_product.name}</td>
           <td>{AppState.cat.sub.map((it) => (it.id == item.store_to_product.cat_id ? `${it.name}  /  ${it.main_name}` : ""))} </td>
@@ -150,11 +155,18 @@ function StoreManagement(args) {
     })
   }, [product.product_id])
 
-  function editModal() {}
+  function editModal(product_id, price, stock) {
+    setModal(true)
+    setTimeout(() => {
+      document.querySelector(".select-product").value = product_id
+      document.querySelector("#productStock").value = stock
+      document.querySelector("#productPrice").value = price
+    }, 1)
+  }
 
   return (
     <div className="container store-management">
-      <h1 className="">Store Application</h1>
+      <h1 className="">Store Management</h1>
       <div className="form-wrapper">
         <div className="topSection">
           {appFormData.logo != "" || appFormData.banner != "" ? (
@@ -238,7 +250,7 @@ function StoreManagement(args) {
           <TabPane tabId="2">Worker Content</TabPane>
         </TabContent>
       </div>
-      <Modal isOpen={modal} toggle={toggle} {...args}>
+      <Modal className="storeProduct-modal" isOpen={modal} toggle={toggle} {...args}>
         <ModalHeader toggle={toggle}>Create Product for Your Store</ModalHeader>
         <ModalBody>
           <Input
@@ -269,6 +281,7 @@ function StoreManagement(args) {
               Product Name
             </Label>
             <Input
+              className="select-product"
               id="newproduct-name"
               name="productName"
               type="select"

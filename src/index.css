@@ -242,5 +242,5 @@
   color: #826f6f;
 }
 .store-management .productTable tbody tr {
-  cursor: pointer;
+  cursor: cell;
 }
