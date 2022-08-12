@@ -38,8 +38,14 @@ const stores = createSlice({
       state.storeData.banner_path = action.payload.images[0].path
       state.storeData.logo_path = action.payload.images[1].path
     },
+    bannerImg: (state, action) => {
+      state.storeCounter = action.payload.banner
+    },
+    logoImg: (state, action) => {
+      state.storeCounter = action.payload.logo
+    },
   },
 })
 
-export const { takePendingStores, takeDependingStores, countStore, storeData } = stores.actions
+export const { takePendingStores, takeDependingStores, countStore, storeData, bannerImg, logoImg } = stores.actions
 export default stores.reducer

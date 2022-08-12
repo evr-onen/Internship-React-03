@@ -5,7 +5,7 @@ import cat from "./catStore"
 import stores from "./StoreStore"
 import sheet from "./FreeStyle"
 import product from "./ProductStore"
-
+import storeproduct from "./StoreProduct"
 const store = configureStore({
   reducer: {
     user,
@@ -13,6 +13,7 @@ const store = configureStore({
     stores,
     sheet,
     product,
+    storeproduct,
   },
 })
 

@@ -1,5 +1,5 @@
 import Axios from "axios"
-export let res, storeDataResp
+export let res, storeDataResp, storeImgResp
 export let allStoresRes
 
 export const storeCreate = async (token, name, email, address, phone, user_id, banner, brand) => {
@@ -30,6 +30,23 @@ export const storeUpdate = async (token, name, email, address, phone, id) => {
     }
   ).then((response) => {
     return console.log(response)
+  })
+}
+export const storeImageUpdate = async (token, store_id, banner, logo) => {
+  await Axios.post(
+    `store/images/${store_id}`,
+    { banner, logo },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+      },
+    }
+  ).then((response) => {
+    console.log(response)
+    storeImgResp = response.data
+    return response
   })
 }
 

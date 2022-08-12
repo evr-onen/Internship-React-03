@@ -1,8 +1,12 @@
+import { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Axios from "axios"
 import { setDataLocaltoState } from "./Stores/userStore"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+
+import { getCats, categoryRes } from "./Services/Category"
+import { takeMainCats, takeSubCats } from "./Stores/catStore"
 
 import FrontPage from "./Components/FrontPage"
 import Header from "./Components/Header"
@@ -17,12 +21,44 @@ import Register from "./Components/Register"
 import { AdminRoutes, StoreRoutes, UnloginRoutes, LoginRoutes } from "./PrivateRoutes"
 
 Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
-
+let main = [],
+  sub = [],
+  detailedSubs = []
 function App() {
+  const appState = useSelector((state) => state)
   const Dispatch = useDispatch()
   if (localStorage.getItem("token")) {
     Dispatch(setDataLocaltoState(localStorage.getItem("token")))
   }
+
+  useEffect(() => {
+    getCats(appState.user.token).then(() => {
+      categoryRes.data.map((item) => {
+        if (item.main_id == 0) {
+          main.push(item)
+        } else {
+          sub.push(item)
+        }
+      })
+
+      Dispatch(takeMainCats(main))
+
+      detailedSubs = []
+      sub.map((item, index) => {
+        main.map((it, ind) => {
+          if (item.main_id === it.id) {
+            let subCont = {}
+            subCont = { id: item.id, name: item.name, main_id: item.main_id, main_name: it.name }
+            detailedSubs.push(subCont)
+          }
+        })
+      })
+      Dispatch(takeSubCats(detailedSubs))
+
+      main = []
+      sub = []
+    })
+  }, [])
 
   return (
     <BrowserRouter>

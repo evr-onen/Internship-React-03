@@ -1,6 +1,6 @@
 import Axios from "axios"
-
 export let getallproducts = []
+
 export const productCreate = async (token, name, description, cat_id, file1, file2, file3) => {
   return await Axios.post(
     "product/",
