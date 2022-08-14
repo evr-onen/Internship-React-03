@@ -6,6 +6,7 @@ import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "re
 function FrontPage() {
   const AppState = useSelector((state) => state)
   getStore(AppState.user.token, AppState.user.store_id)
+  console.log(AppState.user)
   return (
     <div>
       <div className="frontpage container d-flex">

@@ -1,5 +1,5 @@
 import Axios from "axios"
-export let createResponse, updatedProductRes, getAllStoreProductsRes
+export let createResponse, updatedProductRes, getAllStoreProductsRes, delProductRes
 
 export const storeProductCreate = async (token, store_id, product_id, price, stock) => {
   return await Axios.post(
@@ -18,7 +18,7 @@ export const storeProductCreate = async (token, store_id, product_id, price, sto
 
 export const storeProductUpdate = async (token, id, store_id, product_id, price, stock) => {
   await Axios.post(
-    `stostoreproductre/${id}`,
+    `storeproduct/${id}`,
     { store_id, product_id, price, stock },
     {
       headers: {
@@ -26,13 +26,13 @@ export const storeProductUpdate = async (token, id, store_id, product_id, price,
       },
     }
   ).then((response) => {
-    return console.log(response)
+    updatedProductRes = response.data
   })
 }
 
 export const storeProductDestroy = async (token, id) => {
   return await Axios.delete(
-    `store/${id}`,
+    `storeproduct/${id}`,
     {},
     {
       headers: {
@@ -40,7 +40,7 @@ export const storeProductDestroy = async (token, id) => {
       },
     }
   ).then((response) => {
-    console.log(response)
+    delProductRes = response.data
   })
 }
 

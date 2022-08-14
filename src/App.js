@@ -18,12 +18,13 @@ import StoreApp from "./Components/StoreApp"
 import StoreManagement from "./Components/StoreManagement"
 import Register from "./Components/Register"
 
-import { AdminRoutes, StoreRoutes, UnloginRoutes, LoginRoutes } from "./PrivateRoutes"
+import { AdminRoutes, StoreRoutes, UnloginRoutes, LoginRoutes, HashRoutes } from "./PrivateRoutes"
 
 Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
 let main = [],
   sub = [],
   detailedSubs = []
+const hash = JSON.parse(localStorage.getItem("userData")).hash
 function App() {
   const appState = useSelector((state) => state)
   const Dispatch = useDispatch()
@@ -59,7 +60,7 @@ function App() {
       sub = []
     })
   }, [])
-
+  console.log(hash)
   return (
     <BrowserRouter>
       <Header />
@@ -73,6 +74,9 @@ function App() {
 
         <Route element={<StoreRoutes />}>
           <Route path="/store-management" element={<StoreManagement />} />
+        </Route>
+        <Route element={<HashRoutes />}>
+          <Route path={"/" + hash} element={<SingleProduct />} />
         </Route>
 
         <Route element={<UnloginRoutes />}>

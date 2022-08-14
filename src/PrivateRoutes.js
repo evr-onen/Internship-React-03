@@ -31,3 +31,11 @@ export const LoginRoutes = () => {
 
   return auth.user_spec ? <Outlet /> : <Navigate to="/login" />
 }
+
+export const HashRoutes = () => {
+  const UserState = useSelector((state) => state.user)
+
+  let auth = { hash: UserState.hash == "" }
+
+  return auth.hash ? <Outlet /> : <Navigate to="/" />
+}

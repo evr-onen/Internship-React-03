@@ -4,9 +4,9 @@ import { Input, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormG
 
 import { storeData } from "../Stores/StoreStore"
 import { takeProduct } from "../Stores/ProductStore"
-import { takeStoredProducts } from "../Stores/StoreProduct"
+import { takeStoredProducts, refreshStoredProducts, storedProductCount } from "../Stores/StoreProduct"
 import { getStore, storeDataResp, storeImageUpdate, storeImgResp } from "../Services/Store"
-import { storeProductCreate, storeProductUpdate, createResponse, updatedProductRes, getAllStoreProductsRes, getstoreProducts } from "../Services/StoreProduct"
+import { storeProductCreate, storeProductUpdate, createResponse, updatedProductRes, getAllStoreProductsRes, getstoreProducts, storeProductDestroy, delProductRes } from "../Services/StoreProduct"
 import { getProducts, getallproducts } from "../Services/Product"
 
 import { Nav, NavItem, NavLink, TabContent, TabPane, Table } from "reactstrap"
@@ -30,13 +30,15 @@ function StoreManagement(args) {
   const [activeTab, setActiveTab] = useState("1")
 
   const Dispatch = useDispatch()
-  const [product, setProduct] = useState({
+  const resetProduct = {
+    id: 0,
     cat_id: 0,
     main_id: 0,
     product_id: 0,
     price: 0,
     stock: 0,
-  })
+  }
+  const [product, setProduct] = useState(resetProduct)
 
   const [appFormData, setAppFormData] = useState({
     banner: "",
@@ -48,12 +50,12 @@ function StoreManagement(args) {
   })
 
   const storeProductList = () => {
-    return AppState.storeproduct.storedProducts?.map((item, index) => {
+    return AppState.storeproduct.storedProducts.map((item, index) => {
       return (
         <tr
           key={index}
           onClick={() => {
-            editModal(item.product_id, item.price, item.stock, item.id)
+            editModal(item.product_id, item.price, item.stock, item.store_to_product.cat_id, item.id)
           }}
         >
           <th scope="row">{index + 1}</th>
@@ -78,12 +80,22 @@ function StoreManagement(args) {
     })
   }
 
-  function createProductModal() {
-    setModal(true)
-  }
   function createStoreProduct() {
     storeProductCreate(AppState.user.token, AppState.user.store_id, product.product_id, product.price, product.stock).then(() => {
+      Dispatch(refreshStoredProducts(createResponse))
       toggle()
+    })
+  }
+  function updateStoreProduct() {
+    storeProductUpdate(AppState.user.token, product.id, AppState.user.store_id, product.product_id, product.price, product.stock).then(() => {
+      Dispatch(refreshStoredProducts(updatedProductRes))
+      toggle()
+    })
+  }
+  function deleteSubmit() {
+    storeProductDestroy(AppState.user.token, product.id).then(() => {
+      Dispatch(refreshStoredProducts(delProductRes))
+      setModal(false)
     })
   }
   function selectMainList() {
@@ -154,16 +166,32 @@ function StoreManagement(args) {
       }
     })
   }, [product.product_id])
-
-  function editModal(product_id, price, stock) {
+  function createProductModal() {
     setModal(true)
     setTimeout(() => {
-      document.querySelector(".select-product").value = product_id
-      document.querySelector("#productStock").value = stock
-      document.querySelector("#productPrice").value = price
-    }, 1)
+      //Modal açılmadan çalıstıgından kullandım. 1 bile olsa yeterli aslında nedense
+      document.querySelector(".delete-btn").remove()
+    }, 20)
+  }
+  function editModal(product_id, price, stock, cat_id, id) {
+    setModal(true)
+    setTimeout(() => {
+      setProduct({ cat_id, main_id: 0, product_id, price, stock, id })
+
+      AppState.storeproduct.storedProducts?.map((item, index) => {
+        AppState.cat.sub.map((it) => (it.id == item.store_to_product.cat_id ? setProduct((prev) => ({ ...prev, main_id: it.main_id })) : ""))
+      })
+      document.querySelector(".storeProduct-modal .modal-footer .create-btn").textContent = "Edit"
+    }, 20)
   }
 
+  function editCreateSubmit() {
+    if (document.querySelector(".storeProduct-modal .modal-footer .create-btn").textContent === "Edit") {
+      updateStoreProduct()
+    } else {
+      createStoreProduct()
+    }
+  }
   return (
     <div className="container store-management">
       <h1 className="">Store Management</h1>
@@ -250,8 +278,27 @@ function StoreManagement(args) {
           <TabPane tabId="2">Worker Content</TabPane>
         </TabContent>
       </div>
-      <Modal className="storeProduct-modal" isOpen={modal} toggle={toggle} {...args}>
-        <ModalHeader toggle={toggle}>Create Product for Your Store</ModalHeader>
+      <Modal
+        className="storeProduct-modal"
+        isOpen={modal}
+        toggle={() => {
+          setTimeout(() => {
+            setProduct(resetProduct)
+          }, 200)
+          toggle()
+        }}
+        {...args}
+      >
+        <ModalHeader
+          toggle={() => {
+            setTimeout(() => {
+              setProduct(resetProduct)
+            }, 200)
+            toggle()
+          }}
+        >
+          Create Product for Your Store
+        </ModalHeader>
         <ModalBody>
           <Input
             className="mb-3 w-100 selectMainCat"
@@ -323,14 +370,32 @@ function StoreManagement(args) {
         </ModalBody>
         <ModalFooter>
           <Button
+            className="create-btn"
             color="primary"
             onClick={() => {
-              createStoreProduct()
+              editCreateSubmit()
             }}
           >
             Create
           </Button>{" "}
-          <Button color="secondary" onClick={toggle}>
+          <Button
+            className="delete-btn"
+            color="danger"
+            onClick={() => {
+              deleteSubmit()
+            }}
+          >
+            Delete
+          </Button>{" "}
+          <Button
+            color="secondary"
+            onClick={() => {
+              setTimeout(() => {
+                setProduct(resetProduct)
+              }, 200)
+              toggle()
+            }}
+          >
             back
           </Button>
         </ModalFooter>

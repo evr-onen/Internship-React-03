@@ -18,13 +18,14 @@ function Login() {
 
   useEffect(() => {
     AppState.user.isLogin && Navigate("/")
+    console.log(AppState.user)
   }, [AppState.user.isLogin])
 
   function loginHandler() {
     userLogin(loginData.email, loginData.password).then(() => {
       Dispatch(takeToken(localStorage.getItem("token")))
 
-      Dispatch(takeTokenData(JSON.parse(localStorage.getItem("userData")))).then(() => {})
+      Dispatch(takeTokenData(JSON.parse(localStorage.getItem("userData"))))
     })
     console.log(AppState.user)
   }

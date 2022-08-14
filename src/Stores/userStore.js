@@ -10,6 +10,8 @@ const initialState = {
   isLogin: false,
   token: "",
   store_id: 0,
+  hash: "",
+  sender_id: 0,
 }
 
 const user = createSlice({
@@ -25,6 +27,8 @@ const user = createSlice({
       state.userSpec = action.payload.user_spec
       state.isLogin = true
       state.store_id = action.payload.store_id
+      state.hash = action.payload.hash
+      state.sender_id = action.payload.sender_id
     },
     removeTokenData: (state, action) => {
       state.id = ""
