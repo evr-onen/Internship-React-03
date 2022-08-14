@@ -55,6 +55,5 @@ export const getstoreProducts = async (token) => {
     }
   ).then((response) => {
     getAllStoreProductsRes = response.data
-    console.log(response)
   })
 }

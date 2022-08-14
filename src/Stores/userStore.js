@@ -45,6 +45,8 @@ const user = createSlice({
       state.userSpec = getToken(action.payload).user_spec
       state.isLogin = getToken(action.payload).sub ? true : false
       state.store_id = getToken(action.payload).store_id
+      state.hash = getToken(action.payload).hash
+      state.sender_id = getToken(action.payload).sender_id
     },
     counterLogin: (state, action) => {
       state.counter += 1

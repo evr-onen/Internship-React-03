@@ -6,8 +6,10 @@ import { storeData } from "../Stores/StoreStore"
 import { takeProduct } from "../Stores/ProductStore"
 import { takeStoredProducts, refreshStoredProducts, storedProductCount } from "../Stores/StoreProduct"
 import { getStore, storeDataResp, storeImageUpdate, storeImgResp } from "../Services/Store"
+import { countTmp } from "../Stores/tmp"
 import { storeProductCreate, storeProductUpdate, createResponse, updatedProductRes, getAllStoreProductsRes, getstoreProducts, storeProductDestroy, delProductRes } from "../Services/StoreProduct"
 import { getProducts, getallproducts } from "../Services/Product"
+import { workerAppCreate, getWorkerApps, getAllWorkers, workerAppDestroy } from "../Services/tmp"
 
 import { Nav, NavItem, NavLink, TabContent, TabPane, Table } from "reactstrap"
 
@@ -26,9 +28,11 @@ function StoreManagement(args) {
     console.log(AppState.storeproduct)
   }, [])
   const [modal, setModal] = useState(false)
+  const [modal2, setModal2] = useState(false)
+  const toggle2 = () => setModal2(!modal2)
   const toggle = () => setModal(!modal)
   const [activeTab, setActiveTab] = useState("1")
-
+  const [workerAppMail, setWorkerAppMail] = useState()
   const Dispatch = useDispatch()
   const resetProduct = {
     id: 0,
@@ -38,8 +42,9 @@ function StoreManagement(args) {
     price: 0,
     stock: 0,
   }
+  const [workers, setWorkers] = useState([])
   const [product, setProduct] = useState(resetProduct)
-
+  const [sendAppId, setSendAppId] = useState(0)
   const [appFormData, setAppFormData] = useState({
     banner: "",
     logo: "",
@@ -192,6 +197,60 @@ function StoreManagement(args) {
       createStoreProduct()
     }
   }
+
+  function cancelWorkerAppModal(e) {
+    setSendAppId(e.target.parentElement.id)
+    setModal2(true)
+    setTimeout(() => {
+      document.querySelector(".createCancel-modalbtn").textContent = "Cancel"
+      document.querySelector("#worker-email").remove()
+      document.querySelector(".modal-body label").remove()
+      document.querySelector(".modal-body").innerHTML = `
+      <h4 className="text-align"> Are You Sure !!</h4>  
+      `
+    }, 200)
+  }
+
+  useEffect(() => {
+    getWorkerApps(AppState.user.token, AppState.user.store_id).then(() => {
+      setWorkers(getAllWorkers)
+    })
+  }, [AppState.tmp.count])
+
+  function workerAppList() {
+    return workers?.map((item, index) => {
+      return (
+        <tr
+          id={item.id}
+          key={index}
+          onClick={(e) => {
+            cancelWorkerAppModal(e)
+          }}
+        >
+          <th scope="row">{index + 1}</th>
+          <td>{item.user.name}</td>
+          <td></td>
+          <td></td>
+          <td>{item.status == 1 ? "Pending" : "Active"}</td>
+        </tr>
+      )
+    })
+  }
+
+  function submitWorkerApp() {
+    if (document.querySelector(".createCancel-modalbtn").textContent == "Send Application") {
+      workerAppCreate(AppState.user.token, AppState.user.store_id, workerAppMail).then(() => {
+        Dispatch(countTmp())
+        setModal2(false)
+      })
+    } else {
+      console.log("delete")
+      workerAppDestroy(AppState.user.token, sendAppId).then(() => {
+        Dispatch(countTmp())
+        setModal2(false)
+      })
+    }
+  }
   return (
     <div className="container store-management">
       <h1 className="">Store Management</h1>
@@ -275,7 +334,30 @@ function StoreManagement(args) {
               </tbody>
             </Table>
           </TabPane>
-          <TabPane tabId="2">Worker Content</TabPane>
+          <TabPane tabId="2">
+            <Table className="productTable" hover>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>e-mail</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {workerAppList()}
+                <tr
+                  className="createProduct"
+                  onClick={() => {
+                    setModal2(true)
+                  }}
+                >
+                  <th colSpan="5">+</th>
+                </tr>
+              </tbody>
+            </Table>
+          </TabPane>
         </TabContent>
       </div>
       <Modal
@@ -397,6 +479,32 @@ function StoreManagement(args) {
             }}
           >
             back
+          </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={modal2} toggle={toggle2} {...args}>
+        <ModalHeader>Make Worker</ModalHeader>
+        <ModalBody>
+          <FormGroup floating>
+            <Input
+              id="worker-email"
+              name="email"
+              placeholder="e-mail"
+              type="text"
+              value={workerAppMail}
+              onChange={(e) => {
+                setWorkerAppMail(e.target.value)
+              }}
+            />
+            <Label for="worker-email">e-mail</Label>
+          </FormGroup>{" "}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={(e) => submitWorkerApp(e)} className="createCancel-modalbtn">
+            Send Application
+          </Button>{" "}
+          <Button color="secondary" onClick={toggle2}>
+            Back
           </Button>
         </ModalFooter>
       </Modal>

@@ -6,6 +6,7 @@ import stores from "./StoreStore"
 import sheet from "./FreeStyle"
 import product from "./ProductStore"
 import storeproduct from "./StoreProduct"
+import tmp from "./tmp"
 const store = configureStore({
   reducer: {
     user,
@@ -14,6 +15,7 @@ const store = configureStore({
     sheet,
     product,
     storeproduct,
+    tmp,
   },
 })
 

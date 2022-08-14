@@ -55,7 +55,6 @@ export const getCats = async (token) => {
       },
     }
   ).then((response) => {
-    console.log(response)
     categoryRes = response
   })
 }

@@ -84,7 +84,6 @@ export const getStore = async (token, id) => {
       Authorization: "Bearer " + token,
     },
   }).then((response) => {
-    console.log(response)
     storeDataResp = response
   })
 }

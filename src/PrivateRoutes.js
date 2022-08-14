@@ -35,7 +35,7 @@ export const LoginRoutes = () => {
 export const HashRoutes = () => {
   const UserState = useSelector((state) => state.user)
 
-  let auth = { hash: UserState.hash == "" }
+  let auth = { hash: UserState.hash != "" }
 
   return auth.hash ? <Outlet /> : <Navigate to="/" />
 }

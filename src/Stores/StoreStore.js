@@ -29,7 +29,6 @@ const stores = createSlice({
       state.storeCounter += 1
     },
     storeData: (state, action) => {
-      console.log(action.payload)
       state.storeData.id = action.payload.id
       state.storeData.name = action.payload.name
       state.storeData.email = action.payload.email

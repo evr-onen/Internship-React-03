@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { getStore, storeDataResp } from "../Services/Store"
 import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
+import { takeToken, takeTokenData } from "../Stores/userStore"
 
 function FrontPage() {
   const AppState = useSelector((state) => state)
-  getStore(AppState.user.token, AppState.user.store_id)
+  const Dispatch = useDispatch()
+  if (AppState.user.store_id) getStore(AppState.user.token, AppState.user.store_id)
   console.log(AppState.user)
   return (
     <div>

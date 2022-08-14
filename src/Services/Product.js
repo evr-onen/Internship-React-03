@@ -55,7 +55,6 @@ export const getProducts = async (token) => {
   })
     .then((response) => {
       getallproducts = response.data
-      console.log(getallproducts)
     })
     .catch((response) => {
       console.log(response)

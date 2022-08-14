@@ -18,7 +18,6 @@ const product = createSlice({
       state.productCounter += 1
     },
     takeProduct: (state, action) => {
-      console.log(action.payload)
       state.products = action.payload
     },
   },

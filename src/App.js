@@ -24,7 +24,7 @@ Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
 let main = [],
   sub = [],
   detailedSubs = []
-const hash = JSON.parse(localStorage.getItem("userData")).hash
+const hash = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")).hash : ""
 function App() {
   const appState = useSelector((state) => state)
   const Dispatch = useDispatch()
@@ -60,7 +60,7 @@ function App() {
       sub = []
     })
   }, [])
-  console.log(hash)
+
   return (
     <BrowserRouter>
       <Header />
@@ -76,7 +76,7 @@ function App() {
           <Route path="/store-management" element={<StoreManagement />} />
         </Route>
         <Route element={<HashRoutes />}>
-          <Route path={"/" + hash} element={<SingleProduct />} />
+          <Route path={"/" + appState.user.hash} element={<SingleProduct />} />
         </Route>
 
         <Route element={<UnloginRoutes />}>
