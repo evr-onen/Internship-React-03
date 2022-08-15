@@ -36,7 +36,6 @@ function AdminProduct(args) {
   }
 
   function selectSubList() {
-    console.log(product.main_id)
     if (product.main_id === 0 || product.main_id === "Select Main Category") {
       return AppState.cat.sub?.map((item, index) => {
         return (
@@ -88,16 +87,11 @@ function AdminProduct(args) {
       if (item.classList.contains("main-img")) fsx.push(item.querySelector("input").files[0])
       else fs.push(item.querySelector("input").files[0])
     })
+    console.log(fsx)
+    console.log(fs)
     for (let i in fs) {
       fsx.push(fs[i])
     }
-    // data.append("file1", fsx[0])
-    // data.append("file2", fsx[1])
-    // data.append("file3", fsx[2])
-
-    // data.append("name", product.name)
-    // data.append("description", product.description)
-    // data.append("cat_id", product.cat_id)
 
     productCreate(AppState.user.token, product.name, product.description, product.cat_id, fsx[0], fsx[1], fsx[2])
     Dispatch(countProduct())

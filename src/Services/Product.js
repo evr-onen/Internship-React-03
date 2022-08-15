@@ -17,10 +17,10 @@ export const productCreate = async (token, name, description, cat_id, file1, fil
   })
 }
 
-export const productUpdate = async (token, id, name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3) => {
+export const productUpdate = async (token, id, name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3, ids) => {
   await Axios.post(
     `product/${id}`,
-    { name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3 },
+    { name, description, cat_id, file1, file2, file3, fileID1, fileID2, fileID3, ids },
     {
       headers: {
         Authorization: "Bearer " + token,

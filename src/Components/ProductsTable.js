@@ -16,6 +16,7 @@ function ProductsTable(args) {
   const [proImg1, setProImg1] = useState()
   const [proImg2, setProImg2] = useState()
   const [proImg3, setProImg3] = useState()
+  const [productsImages, setProductsImages] = useState([])
   const toggle1 = () => {
     setModal1(!modal1)
   }
@@ -24,8 +25,10 @@ function ProductsTable(args) {
     description: "lorem ipsum",
     cat_id: 0,
     main_id: 0,
+    ids: [],
+    paths: [],
   })
-
+  console.log(product.ids)
   useEffect(() => {
     getProducts(AppState.user.token).then(() => {
       Dispatch(takeAdminProducts(getallproducts))
@@ -43,7 +46,6 @@ function ProductsTable(args) {
   }
 
   function selectSubList() {
-    console.log(product.cat_mainid)
     if (product.cat_mainid === 0 || product.cat_mainid === "Select Main Category") {
       return AppState.cat.sub?.map((item, index) => {
         return (
@@ -73,20 +75,42 @@ function ProductsTable(args) {
     })
     items[k].classList.add("main-img")
   }
-  console.log(AppState)
 
   function editProductSubmit() {
     let fs = [],
-      fsx = []
+      fsx = [],
+      idi = [],
+      idix = []
     document.querySelectorAll(".new-product-images > .item").forEach((item) => {
-      if (item.classList.contains("main-img")) fsx.push(item.querySelector("input").files[0])
-      else fs.push(item.querySelector("input").files[0])
+      if (item.classList.contains("main-img")) {
+        if (item.querySelector("input").files[0] === undefined) {
+          fsx.push(item.querySelector("img").src)
+
+          idix.push(item.querySelector("img").alt)
+        } else {
+          fsx.push(item.querySelector("input").files[0])
+          idix.push("0")
+        }
+      } else {
+        if (item.querySelector("input").files[0] === undefined) {
+          fs.push(item.querySelector("img").src)
+
+          idi.push(item.querySelector("img").alt)
+        } else {
+          fs.push(item.querySelector("input").files[0])
+          idi.push("0")
+        }
+      }
     })
     for (let i in fs) {
       fsx.push(fs[i])
     }
-
-    productUpdate(AppState.user.token, product.id, product.name, product.description, product.cat_id, fsx[0], fsx[1], fsx[2], product.ids[0], product.ids[1], product.ids[2])
+    for (let i in idi) {
+      idix.push(idi[i])
+    }
+    console.log(idix)
+    console.log(idix)
+    productUpdate(AppState.user.token, product.id, product.name, product.description, product.cat_id, fsx[0], fsx[1], fsx[2], idix[0], idix[1], idix[2], product.ids)
     Dispatch(countProduct())
     setModal1(false)
   }
@@ -119,6 +143,7 @@ function ProductsTable(args) {
     setProImg1(paths[0])
     setProImg2(paths[1])
     setProImg3(paths[2])
+    setProductsImages()
     setProduct({
       id: modalData.id,
       name: modalData.name,
@@ -131,18 +156,31 @@ function ProductsTable(args) {
   }
   function listProductsItems(data) {
     return data.map((item, index) => {
+      console.log(data)
       return (
         <tr key={index} onClick={(e) => editHandler(e, item.id, item.name, item.cat_id)}>
           <th scope="row">{index + 1}</th>
           <td>
             {item.images.map((it, ind) => {
-              return (
-                <div key={ind} className="imgs-wrapper">
-                  <img src={"http://127.0.0.1:8000" + it.path} alt={it.id} />
-                </div>
-              )
+              if (it.image_for == "main") {
+                return (
+                  <div key={ind} className="imgs-wrapper">
+                    <img src={"http://127.0.0.1:8000" + it.path} alt={it.id} />{" "}
+                  </div>
+                )
+              }
+            })}
+            {item.images.map((it, ind) => {
+              if (it.image_for == "product") {
+                return (
+                  <div key={ind} className="imgs-wrapper">
+                    <img src={"http://127.0.0.1:8000" + it.path} alt={it.id} />{" "}
+                  </div>
+                )
+              }
             })}
           </td>
+
           <td>{item.name}</td>
           <td>{AppState.cat.sub.map((subby, index) => (item.cat_id === subby.id ? subby.name : ""))}</td>
         </tr>
@@ -233,7 +271,7 @@ function ProductsTable(args) {
                       setProImg1(URL.createObjectURL(e.target.files[0]))
                     }}
                   />
-                  <img src={proImg1} />
+                  <img src={proImg1} alt={product.ids[0]} />
                 </label>
                 <div className="item-btn" color="primary" onClick={() => allforMain(0)}>
                   Main
@@ -248,7 +286,7 @@ function ProductsTable(args) {
                       setProImg2(URL.createObjectURL(e.target.files[0]))
                     }}
                   />
-                  <img src={proImg2} />
+                  <img src={proImg2} alt={product.ids[1]} />
                 </label>
                 <div className="item-btn" color="primary" onClick={() => allforMain(1)}>
                   Main
@@ -264,7 +302,7 @@ function ProductsTable(args) {
                     }}
                   />
 
-                  <img src={proImg3} />
+                  <img src={proImg3} alt={product.ids[2]} />
                 </label>
                 <div className="item-btn" color="primary" onClick={() => allforMain(2)}>
                   Main
