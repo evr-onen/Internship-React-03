@@ -18,9 +18,12 @@ function Register() {
   useEffect(() => {
     appState.user.isLogin && Navigate("/")
   })
+  let location = document.URL,
+    NewLocation = new URL(location),
+    urll = NewLocation.searchParams.get("key")
 
   function registerHandler() {
-    userRegister(getRegData.name, getRegData.email, getRegData.password, getRegData.password_confirmation)
+    userRegister(getRegData.name, getRegData.email, getRegData.password, getRegData.password_confirmation, urll)
       .then(() => {
         userLogin(getRegData.email, getRegData.password)
       })

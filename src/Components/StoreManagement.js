@@ -32,7 +32,7 @@ function StoreManagement(args) {
   const toggle2 = () => setModal2(!modal2)
   const toggle = () => setModal(!modal)
   const [activeTab, setActiveTab] = useState("1")
-  const [workerAppMail, setWorkerAppMail] = useState()
+  const [workerAppMail, setWorkerAppMail] = useState("")
   const Dispatch = useDispatch()
   const resetProduct = {
     id: 0,
@@ -228,7 +228,7 @@ function StoreManagement(args) {
           }}
         >
           <th scope="row">{index + 1}</th>
-          <td>{item.user.name}</td>
+          <td>{item.user?.name}</td>
           <td></td>
           <td></td>
           <td>{item.status == 1 ? "Pending" : "Active"}</td>

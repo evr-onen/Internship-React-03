@@ -11,7 +11,7 @@ function AdminProduct(args) {
   const AppState = useSelector((state) => state)
   const Dispatch = useDispatch()
   const [modal1, setModal1] = useState(false)
-  const [selectedMain, setSelectedMain] = useState(0)
+
   const [proImg1, setProImg1] = useState()
   const [proImg2, setProImg2] = useState()
   const [proImg3, setProImg3] = useState()
