@@ -21,12 +21,14 @@ import Register from "./Components/Register"
 import { AdminRoutes, StoreRoutes, UnloginRoutes, LoginRoutes, HashRoutes } from "./PrivateRoutes"
 
 Axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
+
 let main = [],
   sub = [],
   detailedSubs = []
 const hash = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")).hash : ""
 function App() {
   const appState = useSelector((state) => state)
+  Axios.defaults.headers.get["Authorization"] = "Bearer " + appState.user.token
   const Dispatch = useDispatch()
   if (localStorage.getItem("token")) {
     Dispatch(setDataLocaltoState(localStorage.getItem("token")))
@@ -88,7 +90,7 @@ function App() {
           <Route path="/store-application" element={<StoreApp />} />
         </Route>
       </Routes>
-      <Footer />
+      {appState.user.userSpec === 3 && <Footer />}
     </BrowserRouter>
   )
 }

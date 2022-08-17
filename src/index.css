@@ -1,12 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins&display=swap");
+
+/* font-family: 'Oswald', sans-serif;
+
+font-family: 'Poppins', sans-serif; */
+body {
+  background-color: #defff2;
+}
 #root {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #2b2d42;
 }
 .footer {
   margin-top: auto;
 }
-
+.navbar > div > div > nav {
+  background-color: #0ff4c6 !important;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
 .navbar-btns a {
   text-decoration: none;
   color: black;
@@ -24,10 +37,16 @@
 .admin .nav-tabs a {
   cursor: pointer !important;
   transition: 200ms;
+  color: #000009;
+  background-color: #1ddbb4;
+  border: 1px;
 }
 .admin .nav-tabs a.active {
-  background-color: coral;
-  color: aliceblue;
+  background-color: #0ff4c6;
+  color: #000009;
+}
+button {
+  background-color: #464f51 !important;
 }
 .text-bold {
   font-weight: 700;
@@ -38,10 +57,27 @@
 }
 .category-list > div > #mainTable {
   width: 250px !important;
+  background: #0ff4c6;
+  margin-right: 20px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  border-radius: 10px;
 }
 .category-list > div > #subTable {
   width: 450px !important;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  border-radius: 10px;
+  background: #0ff4c6;
 }
+.category-list > div > #subTable thead th:nth-of-type(n + 2) {
+  width: 300px;
+}
+.store-table-wrapper {
+  width: 100%;
+}
+.store-table-wrapper > ul {
+  margin-right: 30px;
+}
+
 .store-app form .topSection {
   position: relative;
   height: 250px;
@@ -126,6 +162,13 @@
 }
 .create-product-modal .new-product-images input {
   display: none;
+}
+.admin-product .products-table thead th:nth-of-type(2) {
+  min-width: 350px !important;
+}
+.admin-product .products-table thead th:nth-of-type(n + 3) {
+  min-width: 100px !important;
+  border: 1px soli black;
 }
 .admin-product .products-table {
   width: 100%;
@@ -243,4 +286,20 @@
 }
 .store-management .productTable tbody tr {
   cursor: cell;
+}
+.products-table table thead th {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: "Oswald", sans-serif;
+}
+.products-table table thead th:nth-of-type(2) {
+  width: 500px;
+}
+.products-table > .table {
+  border-radius: 10px;
+  background-color: #0ff4c6;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+.products-table .table tr {
+  font-family: "Poppins", sans-serif;
 }

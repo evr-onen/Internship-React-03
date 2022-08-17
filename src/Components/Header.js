@@ -13,14 +13,13 @@ function Header(props) {
   const appState = useSelector((state) => state)
 
   const [isOpen, setIsOpen] = useState(false)
-  const toggle = () => setIsOpen(!isOpen)
 
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const togglee = () => setDropdownOpen((prevState) => !prevState)
 
   const changeBtns = () => {
     return (
-      !appState.user.token && (
+      !appState.user.isLogin && (
         <div className="right-side-menu-btns ms-auto">
           <a className="enter-register  me-3" href="/register-user">
             Register
@@ -39,13 +38,14 @@ function Header(props) {
 
   useEffect(() => {
     changeBtns()
-  }, [appState.cat.loginCounter])
+  }, [appState.user.counter])
 
   function logoutHandler() {
-    userLogout(appState.user.token)
-    Dispatch(removeTokenData())
-    Dispatch(counterLogin())
-    console.log(appState.user)
+    userLogout(appState.user.token).then(() => {
+      Dispatch(removeTokenData())
+      Dispatch(counterLogin())
+      console.log(appState.user)
+    })
   }
   return (
     <div className="header">

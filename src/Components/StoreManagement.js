@@ -16,7 +16,8 @@ import { Nav, NavItem, NavLink, TabContent, TabPane, Table } from "reactstrap"
 function StoreManagement(args) {
   const AppState = useSelector((state) => state)
   useEffect(() => {
-    getstoreProducts(AppState.user.token).then(() => {
+    console.log(AppState.user.store_id)
+    getstoreProducts(AppState.user.token, AppState.user.store_id).then(() => {
       Dispatch(takeStoredProducts(getAllStoreProductsRes))
     })
     getStore(AppState.user.token, AppState.user.store_id).then(() => {
@@ -25,7 +26,7 @@ function StoreManagement(args) {
     getProducts(AppState.user.token).then(() => {
       Dispatch(takeProduct(getallproducts))
     })
-    console.log(AppState.storeproduct)
+    console.log(getAllStoreProductsRes)
   }, [])
   const [modal, setModal] = useState(false)
   const [modal2, setModal2] = useState(false)
@@ -53,7 +54,7 @@ function StoreManagement(args) {
     banner: [],
     logo: [],
   })
-
+  console.log(AppState)
   const storeProductList = () => {
     return AppState.storeproduct.storedProducts.map((item, index) => {
       return (

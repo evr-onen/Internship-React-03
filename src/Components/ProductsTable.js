@@ -85,7 +85,6 @@ function ProductsTable(args) {
       if (item.classList.contains("main-img")) {
         if (item.querySelector("input").files[0] === undefined) {
           fsx.push(item.querySelector("img").src)
-
           idix.push(item.querySelector("img").alt)
         } else {
           fsx.push(item.querySelector("input").files[0])
@@ -154,9 +153,9 @@ function ProductsTable(args) {
       paths: modalData.paths,
     })
   }
+
   function listProductsItems(data) {
     return data.map((item, index) => {
-      console.log(data)
       return (
         <tr key={index} onClick={(e) => editHandler(e, item.id, item.name, item.cat_id)}>
           <th scope="row">{index + 1}</th>
@@ -181,8 +180,8 @@ function ProductsTable(args) {
             })}
           </td>
 
-          <td>{item.name}</td>
-          <td>{AppState.cat.sub.map((subby, index) => (item.cat_id === subby.id ? subby.name : ""))}</td>
+          <td className="text-center align-middle ">{item.name}</td>
+          <td className="text-center align-middle">{AppState.cat.sub.map((subby, index) => (item.cat_id === subby.id ? subby.name : ""))}</td>
         </tr>
       )
     })
@@ -209,9 +208,9 @@ function ProductsTable(args) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Images</th>
-              <th>Name</th>
-              <th>Category</th>
+              <th className="text-center w-50">Images</th>
+              <th className="text-center w-25">Name</th>
+              <th className="text-center w-25">Category</th>
             </tr>
           </thead>
           <tbody>{listProductsItems(AppState.product.forAdmin)}</tbody>

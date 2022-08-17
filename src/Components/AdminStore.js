@@ -84,7 +84,7 @@ function AdminStore(args) {
     })
   }
   return (
-    <>
+    <div className="mt-5 d-flex store-table-wrapper">
       <Nav tabs vertical className="w-25">
         <NavItem className="mt-4">
           <NavLink className={activeTab == "1" ? "active text-center" : "text-center"} onClick={() => setActiveTab("1")}>
@@ -149,7 +149,7 @@ function AdminStore(args) {
           </Button>
         </ModalFooter>
       </Modal>
-    </>
+    </div>
   )
 }
 
