@@ -4,7 +4,7 @@ import { getStore, storeDataResp } from "../Services/Store"
 import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
 import { takeToken, takeTokenData } from "../Stores/userStore"
 
-import { getstoreProducts, getAllStoreProductsRes } from "../Services/StoreProduct"
+import { productsHome, frontPageProducts } from "../Services/Product"
 
 function FrontPage() {
   const AppState = useSelector((state) => state)
@@ -14,40 +14,53 @@ function FrontPage() {
 
   console.log(AppState.user)
   useEffect(() => {
-    getstoreProducts(AppState.user.token).then(() => {
-      setProducts(getAllStoreProductsRes)
+    frontPageProducts(AppState.user.token).then(() => {
+      setProducts(productsHome)
     })
   }, [])
+
   function takecats() {}
-  console.log(products)
+  const getstoreprice = (tttt) => {
+    tttt.sort(function (a, b) {
+      return a.price - b.price
+    })
+  }
+
   function productsList() {
+    console.log(products)
     return products?.map((item, index) => {
-      return (
-        <Card
-          style={{
-            width: "18rem",
-          }}
-          className="m-3"
-          key={index}
-        >
-          <img alt="Card image" src="https://picsum.photos/300/200" />
-          <CardBody className="d-flex flex-column">
-            <CardTitle className="text-center" tag="h5">
-              {item.store_to_product?.name}
-            </CardTitle>
-            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-              {AppState.cat.sub.map((it) => (it.id == item.store_to_product.cat_id ? it.name : ""))}
-            </CardSubtitle>
-            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-              {item.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")} ₺
-            </CardSubtitle>
-            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-              {item.store_id}
-            </CardSubtitle>
-            <Button className="mx-auto mt-4">Add to Card</Button>
-          </CardBody>
-        </Card>
-      )
+      if (item.product_to_store.length != 0) {
+        let ttt = item.product_to_store.sort((a, b) => {
+          return a.price - b.price
+        })
+
+        return (
+          <Card
+            style={{
+              width: "18rem",
+            }}
+            className="m-3"
+            key={index}
+          >
+            <img alt="Card image" src={"http://localhost:3000/" + item.images[0].path} />
+            <CardBody className="d-flex flex-column">
+              <CardTitle className="text-center" tag="h5">
+                {item.name}
+              </CardTitle>
+              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+                {AppState.cat.sub.map((it) => (it.id == item.cat_id ? it.name : ""))}
+              </CardSubtitle>
+              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+                {ttt[0].price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".") + " ₺"}
+              </CardSubtitle>
+              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+                {/* {item.product_to_store?.store_id} */}
+              </CardSubtitle>
+              <Button className="mx-auto mt-4">Add to Card</Button>
+            </CardBody>
+          </Card>
+        )
+      }
     })
   }
   return (

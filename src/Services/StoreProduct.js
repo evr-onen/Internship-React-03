@@ -45,11 +45,19 @@ export const storeProductDestroy = async (token, id) => {
 }
 
 export const getstoreProducts = async (token, store_id) => {
-  return await Axios.get(`storeproduct/all`, {
-    data: {
-      store_id,
+  return await Axios.get(
+    `storeproduct/all`,
+    {
+      params: {
+        store_id,
+      },
     },
-  }).then((response) => {
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  ).then((response) => {
     getAllStoreProductsRes = response.data
   })
 }

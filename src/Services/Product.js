@@ -1,5 +1,6 @@
 import Axios from "axios"
-export let getallproducts = []
+export let getallproducts = [],
+  productsHome = []
 
 export const productCreate = async (token, name, description, cat_id, file1, file2, file3) => {
   return await Axios.post(
@@ -55,6 +56,19 @@ export const getProducts = async (token) => {
   })
     .then((response) => {
       getallproducts = response.data
+    })
+    .catch((response) => {
+      console.log(response)
+    })
+}
+export const frontPageProducts = async (token) => {
+  return await Axios.get(`product/products`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => {
+      productsHome = response.data
     })
     .catch((response) => {
       console.log(response)

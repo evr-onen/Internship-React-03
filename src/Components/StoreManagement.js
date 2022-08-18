@@ -56,7 +56,7 @@ function StoreManagement(args) {
   })
   console.log(AppState)
   const storeProductList = () => {
-    return AppState.storeproduct.storedProducts.map((item, index) => {
+    return AppState.storeproduct.storedProducts?.map((item, index) => {
       return (
         <tr
           key={index}
