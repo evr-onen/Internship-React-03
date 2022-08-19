@@ -20,47 +20,36 @@ function FrontPage() {
   }, [])
 
   function takecats() {}
-  const getstoreprice = (tttt) => {
-    tttt.sort(function (a, b) {
-      return a.price - b.price
-    })
-  }
 
   function productsList() {
     console.log(products)
     return products?.map((item, index) => {
-      if (item.product_to_store.length != 0) {
-        let ttt = item.product_to_store.sort((a, b) => {
-          return a.price - b.price
-        })
-
-        return (
-          <Card
-            style={{
-              width: "18rem",
-            }}
-            className="m-3"
-            key={index}
-          >
-            <img alt="Card image" src={"http://localhost:3000/" + item.images[0].path} />
-            <CardBody className="d-flex flex-column">
-              <CardTitle className="text-center" tag="h5">
-                {item.name}
-              </CardTitle>
-              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-                {AppState.cat.sub.map((it) => (it.id == item.cat_id ? it.name : ""))}
-              </CardSubtitle>
-              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-                {ttt[0].price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".") + " ₺"}
-              </CardSubtitle>
-              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-                {/* {item.product_to_store?.store_id} */}
-              </CardSubtitle>
-              <Button className="mx-auto mt-4">Add to Card</Button>
-            </CardBody>
-          </Card>
-        )
-      }
+      return (
+        <Card
+          style={{
+            width: "18rem",
+          }}
+          className="m-3"
+          key={index}
+        >
+          <img alt="Card image" src={"http://127.0.0.1:8000" + item.images[0].path} />
+          <CardBody className="d-flex flex-column">
+            <CardTitle className="text-center" tag="h5">
+              {item.name}
+            </CardTitle>
+            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+              {AppState.cat.sub.map((it) => (it.id == item.cat_id ? it.name : ""))}
+            </CardSubtitle>
+            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+              {/* {ttt[0].price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".") + " ₺"} */}
+            </CardSubtitle>
+            <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+              {/* {item.product_to_store?.store_id} */}
+            </CardSubtitle>
+            <Button className="mx-auto mt-4">Add to Card</Button>
+          </CardBody>
+        </Card>
+      )
     })
   }
   return (
