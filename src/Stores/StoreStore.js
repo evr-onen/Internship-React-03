@@ -12,6 +12,7 @@ const initialState = {
     phone: "",
     banner_path: "",
     logo_path: "",
+    products: [],
   },
 }
 
@@ -29,6 +30,7 @@ const stores = createSlice({
       state.storeCounter += 1
     },
     storeData: (state, action) => {
+      console.log(action.payload)
       state.storeData.id = action.payload.id
       state.storeData.name = action.payload.name
       state.storeData.email = action.payload.email
@@ -36,6 +38,8 @@ const stores = createSlice({
       state.storeData.phone = action.payload.phone
       state.storeData.banner_path = action.payload.images[0].path
       state.storeData.logo_path = action.payload.images[1].path
+
+      state.storeData.products = action.payload.store_to_products
     },
     bannerImg: (state, action) => {
       state.storeCounter = action.payload.banner

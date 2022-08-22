@@ -50,7 +50,6 @@ export const getWorkerApps = async (token, sender_id) => {
       },
     }
   ).then((response) => {
-    console.log(response.data)
     getAllWorkers = response.data
   })
 }

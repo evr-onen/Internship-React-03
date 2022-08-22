@@ -16,7 +16,6 @@ import { Nav, NavItem, NavLink, TabContent, TabPane, Table } from "reactstrap"
 function StoreManagement(args) {
   const AppState = useSelector((state) => state)
   useEffect(() => {
-    console.log(AppState.user.store_id)
     getstoreProducts(AppState.user.token, AppState.user.store_id).then(() => {
       Dispatch(takeStoredProducts(getAllStoreProductsRes))
     })
@@ -26,8 +25,8 @@ function StoreManagement(args) {
     getProducts(AppState.user.token).then(() => {
       Dispatch(takeProduct(getallproducts))
     })
-    console.log(getAllStoreProductsRes)
   }, [])
+  console.log(AppState)
   const [modal, setModal] = useState(false)
   const [modal2, setModal2] = useState(false)
   const toggle2 = () => setModal2(!modal2)
@@ -54,19 +53,19 @@ function StoreManagement(args) {
     banner: [],
     logo: [],
   })
-  console.log(AppState)
+
   const storeProductList = () => {
-    return AppState.storeproduct.storedProducts?.map((item, index) => {
+    return AppState.stores.storeData?.products?.map((item, index) => {
       return (
         <tr
           key={index}
           onClick={() => {
-            editModal(item.product_id, item.price, item.stock, item.store_to_product.cat_id, item.id)
+            editModal(item.product_id, item.price, item.stock, item.product.cat_id, item.id)
           }}
         >
           <th scope="row">{index + 1}</th>
-          <td>{item.store_to_product.name}</td>
-          <td>{AppState.cat.sub.map((it) => (it.id == item.store_to_product.cat_id ? `${it.name}  /  ${it.main_name}` : ""))} </td>
+          <td>{item.name}</td>
+          <td>{AppState.cat.sub.map((it) => (it.id == item.product.cat_id ? `${it.name}  /  ${it.main_name}` : ""))} </td>
           <td>{item.price}</td>
           <td>{item.stock}</td>
         </tr>
@@ -81,6 +80,7 @@ function StoreManagement(args) {
   function doneBtnEdit() {
     storeImageUpdate(AppState.user.token, AppState.user.store_id, images.banner, images.logo).then(() => {
       Dispatch(storeData(storeImgResp))
+
       setAppFormData({ banner: "", logo: "" })
       setImages({ banner: [], logo: [] })
     })
@@ -90,18 +90,22 @@ function StoreManagement(args) {
     storeProductCreate(AppState.user.token, AppState.user.store_id, product.product_id, product.price, product.stock).then(() => {
       Dispatch(refreshStoredProducts(createResponse))
       toggle()
+      Dispatch(storeData(createResponse))
     })
   }
   function updateStoreProduct() {
     storeProductUpdate(AppState.user.token, product.id, AppState.user.store_id, product.product_id, product.price, product.stock).then(() => {
       Dispatch(refreshStoredProducts(updatedProductRes))
       toggle()
+      Dispatch(storeData(updatedProductRes))
     })
   }
   function deleteSubmit() {
     storeProductDestroy(AppState.user.token, product.id).then(() => {
       Dispatch(refreshStoredProducts(delProductRes))
       setModal(false)
+      console.log(delProductRes)
+      Dispatch(storeData(delProductRes))
     })
   }
   function selectMainList() {
