@@ -101,11 +101,11 @@ function StoreManagement(args) {
     })
   }
   function deleteSubmit() {
-    storeProductDestroy(AppState.user.token, product.id).then(() => {
-      Dispatch(refreshStoredProducts(delProductRes))
+    storeProductDestroy(AppState.user.token, product.id, AppState.user.store_id).then(() => {
+      Dispatch(refreshStoredProducts(delProductRes.data))
+      Dispatch(storeData(delProductRes.data))
       setModal(false)
       console.log(delProductRes)
-      Dispatch(storeData(delProductRes))
     })
   }
   function selectMainList() {
@@ -188,9 +188,8 @@ function StoreManagement(args) {
     setTimeout(() => {
       setProduct({ cat_id, main_id: 0, product_id, price, stock, id })
 
-      AppState.storeproduct.storedProducts?.map((item, index) => {
-        AppState.cat.sub.map((it) => (it.id == item.store_to_product.cat_id ? setProduct((prev) => ({ ...prev, main_id: it.main_id })) : ""))
-      })
+      AppState.cat.sub.map((it) => (it.id == cat_id ? setProduct((prev) => ({ ...prev, main_id: it.main_id })) : ""))
+
       document.querySelector(".storeProduct-modal .modal-footer .create-btn").textContent = "Edit"
     }, 20)
   }

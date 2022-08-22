@@ -30,17 +30,23 @@ export const storeProductUpdate = async (token, id, store_id, product_id, price,
   })
 }
 
-export const storeProductDestroy = async (token, id) => {
+export const storeProductDestroy = async (token, id, store_id) => {
+  console.log(store_id)
   return await Axios.delete(
     `storeproduct/${id}`,
-    {},
+    {
+      data: {
+        store_id,
+      },
+    },
     {
       headers: {
         Authorization: "Bearer " + token,
       },
     }
   ).then((response) => {
-    delProductRes = response.data
+    delProductRes = response
+    console.log(delProductRes)
   })
 }
 

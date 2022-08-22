@@ -15,18 +15,47 @@ function FrontPage() {
   const Dispatch = useDispatch()
   if (AppState.user.store_id) getStore(AppState.user.token, AppState.user.store_id)
   const [products, setProducts] = useState([])
-
+  const [tree, setTree] = useState()
   useEffect(() => {
     frontPageProducts(AppState.user.token).then(() => {
       setProducts(productsHome)
     })
-    makeCatsObj()
   }, [])
-
+  console.log(AppState.cat.sub)
   function makeCatsObj() {
+    cats = {}
+    products.forEach((item) => {
+      makeObjForCats(item.cat_id)
+    })
+  }
+  makeCatsObj()
+
+  function makeObjForCats(sub_id) {
+    AppState.cat.sub.map((item) => {
+      if (item.id == sub_id) {
+        if (cats.hasOwnProperty(item.main_id)) {
+          if (cats[item.main_id].subs.every((it) => it.sub_id != sub_id)) {
+            cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
+          }
+        } else {
+          cats[item.main_id] = {}
+          cats[item.main_id].main_id = item.main_id
+          cats[item.main_id].main_name = item.main_name
+          cats[item.main_id].subs = []
+          // console.log(cats[item.main_id].subs.every((it) => it.sub_id != sub_id))
+          if (cats[item.main_id].subs.every((it) => it.sub_id != sub_id)) {
+            cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
+          }
+        }
+      }
+    })
+    console.log(cats)
+  }
+
+  /* function makeCatsObj() {
     cat = {}
     cats = []
-    items = {}
+    
     arrCats = []
     products.map((item) => {
       cat.sub_id = item.cat_id
@@ -39,39 +68,30 @@ function FrontPage() {
       })
       cats.push(cat)
     })
-
-    console.log(cats)
-    setTimeout(() => {
-      cats.forEach((cat) => {
-        let mainID = cat.main_id
-        if (items.hasOwnProperty(toString(cat.main_id))) {
-          // if (items[cat.main_id].subs.every((item) => item.id != cat.sub_id)) {
+    cats.forEach((cat) => {
+      if (items.hasOwnProperty(cat.main_id)) {
+        if (items[cat.main_id].subs.every((item) => item.id != cat.sub_id)) {
           items[cat.main_id].subs.push({ id: cat.sub_id, name: cat.sub_name })
 
-          //   console.log("çalısiyı buu")
-          // } else {
-          //   console.log("asdasd")
-          // }
-          /*  if (items[cat.main_id].subs.map(cat.sub_id) == -1) {
-            
-          } */
-          console.log("+")
+          console.log("çalısiyı buu")
         } else {
-          items[cat.main_id] = {}
-          items[cat.main_id].main_id = cat.main_id
-          items[cat.main_id].main_name = cat.main_name
-          items[cat.main_id].subs = []
-          items[cat.main_id].subs.push({ id: cat.sub_id, name: cat.sub_name })
-          console.log("-")
+          console.log("asdasd")
         }
-      })
-
-      for (let i in items) {
-        arrCats.push(items[i])
+        console.log("+")
+      } else {
+        items[cat.main_id] = {}
+        items[cat.main_id].main_id = cat.main_id
+        items[cat.main_id].main_name = cat.main_name
+        items[cat.main_id].subs = []
+        items[cat.main_id].subs.push({ id: cat.sub_id, name: cat.sub_name })
+        console.log("-")
       }
-      console.log(items)
-    }, 2)
-  }
+    })
+    for (let i in items) {
+      arrCats.push(items[i])
+    }
+    console.log(items)
+  } */
 
   // function catList() {
   //   return items.map((item, index) => {
@@ -144,6 +164,7 @@ function FrontPage() {
         </div>
         <div className="col-9 main-menu p-3 d-flex flex-wrap">{productsList()}</div>
       </div>
+      {/* {console.log(tree)} */}
     </div>
   )
 }
