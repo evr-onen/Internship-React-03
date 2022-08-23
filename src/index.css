@@ -303,3 +303,43 @@ button {
 .products-table .table tr {
   font-family: "Poppins", sans-serif;
 }
+.cat-wrapper {
+  width: 100%;
+  border: 1px solid black;
+}
+.cat-wrapper > label {
+  width: 100%;
+  text-align: center;
+  background-color: #0ff4c6;
+}
+.cat-wrapper > input {
+  display: none;
+}
+.cat-wrapper > input:checked ~ label {
+  background-color: #b42f57;
+  color: aliceblue;
+}
+.unsel {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.subs-item {
+  width: 100%;
+}
+.subs-item div > label {
+  width: 100%;
+  text-align: center;
+  background-color: #defff2;
+}
+.subs-item div > input {
+  display: none;
+}
+.subs-item div > input:checked ~ label {
+  background-color: #d68fd6;
+  color: aliceblue;
+}

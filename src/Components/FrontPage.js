@@ -4,120 +4,98 @@ import { getStore, storeDataResp } from "../Services/Store"
 import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
 import { takeToken, takeTokenData } from "../Stores/userStore"
 
+import { getFrontCats } from "../Stores/catStore"
 import { productsHome, frontPageProducts } from "../Services/Product"
 
-let cat = {},
-  cats = []
-let items = {},
-  arrCats = []
+let cats = [],
+  arrCats = [],
+  checks = []
 function FrontPage() {
   const AppState = useSelector((state) => state)
   const Dispatch = useDispatch()
   if (AppState.user.store_id) getStore(AppState.user.token, AppState.user.store_id)
   const [products, setProducts] = useState([])
-  const [tree, setTree] = useState()
+  const [checks, setChecks] = useState([])
+
   useEffect(() => {
     frontPageProducts(AppState.user.token).then(() => {
-      setProducts(productsHome)
+      setTimeout(() => {
+        setProducts(productsHome)
+      }, 400)
     })
   }, [])
-  console.log(AppState.cat.sub)
-  function makeCatsObj() {
+
+  useEffect(() => {
     cats = {}
-    products.forEach((item) => {
-      makeObjForCats(item.cat_id)
-    })
-  }
-  makeCatsObj()
 
-  function makeObjForCats(sub_id) {
-    AppState.cat.sub.map((item) => {
-      if (item.id == sub_id) {
-        if (cats.hasOwnProperty(item.main_id)) {
-          if (cats[item.main_id].subs.every((it) => it.sub_id != sub_id)) {
-            cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
+    productsHome.map((itemm) => {
+      AppState.cat.sub.map((item) => {
+        if (item.id == itemm.cat_id) {
+          if (cats.hasOwnProperty(item.main_id)) {
+            if (cats[item.main_id].subs.every((it) => it.sub_id != itemm.cat_id)) {
+              cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
+            }
+          } else {
+            cats[item.main_id] = {}
+            cats[item.main_id].main_id = item.main_id
+            cats[item.main_id].main_name = item.main_name
+            cats[item.main_id].subs = []
+            if (cats[item.main_id].subs.every((it) => it.sub_id != itemm.cat_id)) {
+              cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
+            }
           }
-        } else {
-          cats[item.main_id] = {}
-          cats[item.main_id].main_id = item.main_id
-          cats[item.main_id].main_name = item.main_name
-          cats[item.main_id].subs = []
-          // console.log(cats[item.main_id].subs.every((it) => it.sub_id != sub_id))
-          if (cats[item.main_id].subs.every((it) => it.sub_id != sub_id)) {
-            cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
-          }
-        }
-      }
-    })
-    console.log(cats)
-  }
-
-  /* function makeCatsObj() {
-    cat = {}
-    cats = []
-    
-    arrCats = []
-    products.map((item) => {
-      cat.sub_id = item.cat_id
-      AppState.cat.sub.map((it) => {
-        if (it.id == item.cat_id) {
-          cat.sub_name = it.name
-          cat.main_id = it.main_id
-          cat.main_name = it.main_name
         }
       })
-      cats.push(cat)
     })
-    cats.forEach((cat) => {
-      if (items.hasOwnProperty(cat.main_id)) {
-        if (items[cat.main_id].subs.every((item) => item.id != cat.sub_id)) {
-          items[cat.main_id].subs.push({ id: cat.sub_id, name: cat.sub_name })
-
-          console.log("çalısiyı buu")
-        } else {
-          console.log("asdasd")
-        }
-        console.log("+")
-      } else {
-        items[cat.main_id] = {}
-        items[cat.main_id].main_id = cat.main_id
-        items[cat.main_id].main_name = cat.main_name
-        items[cat.main_id].subs = []
-        items[cat.main_id].subs.push({ id: cat.sub_id, name: cat.sub_name })
-        console.log("-")
-      }
-    })
-    for (let i in items) {
-      arrCats.push(items[i])
+    for (let i in cats) {
+      arrCats.push(cats[i])
     }
-    console.log(items)
-  } */
+    Dispatch(getFrontCats(arrCats))
+    arrCats = []
+  }, [products])
+  function checboxEvents(e) {
+    let parente = e.target.parentElement.parentElement
+    let targetValue = e.target.previousElementSibling.value
 
-  // function catList() {
-  //   return items.map((item, index) => {
-  //     return (
-  //       <div className="cat-wrapper">
-  //         {" "}
-  //         <label htmlFor="{item.main_name + item.main_id}">
-  //           {item.main_name}
-  //           <input id={item.main_name + item.main_id} type="checkbox" value={item.main_id} />
-  //         </label>
-  //       </div>
-  //     )
-  //   })
-  // }
+    if (checks.indexOf(targetValue) != -1) {
+      let filtered = checks.filter((item) => item != targetValue)
+      setChecks(filtered)
+    } else {
+      setChecks((prev) => [...prev, targetValue])
+    }
+    let allChecks = parente
+    if (parente.querySelectorAll("input").every((item) => checks.indexOf(item.value) != -1)) {
+      parente.parentElement.querySelector("input").checked = true
+    }
+    console.log(parente.querySelectorAll("input"))
+  }
   function catList() {
-    // for (let i in items) {
-
-    // }
-    return items.map((item, index) => {
+    return AppState.cat.frontCats.map((item, index) => {
       return (
-        <div className="cat-wrapper">
+        <div className="cat-wrapper" key={item.main_name + index}>
           {" "}
-          <label htmlFor="{item.main_name + item.main_id}">
+          <input id={item.main_name + item.main_id} type="checkbox" value={item.main_id} />
+          <label htmlFor={item.main_name + item.main_id} className="unsel">
             {item.main_name}
-            <input id={item.main_name + item.main_id} type="checkbox" value={item.main_id} />
           </label>
+          <div className="subs-item">
+            {item.subs.map((it, ind) => {
+              return (
+                <div key={ind}>
+                  <input id={it.sub_id} type="checkbox" value={it.sub_id} />
+                  <label
+                    htmlFor={it.sub_id}
+                    className="unsel"
+                    onClick={(e) => {
+                      checboxEvents(e)
+                    }}
+                  >
+                    {it.sub_name}
+                  </label>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )
     })
@@ -158,7 +136,7 @@ function FrontPage() {
         <div className="col-3 side-menu">
           <div className="side-menu-wrapper">
             <div className="select-price"></div>
-            <div className="check-cats"></div>
+            <div className="check-cats">{catList()}</div>
             <div className="select-stores"></div>
           </div>
         </div>

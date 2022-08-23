@@ -26,7 +26,7 @@ function StoreManagement(args) {
       Dispatch(takeProduct(getallproducts))
     })
   }, [])
-  console.log(AppState)
+
   const [modal, setModal] = useState(false)
   const [modal2, setModal2] = useState(false)
   const toggle2 = () => setModal2(!modal2)

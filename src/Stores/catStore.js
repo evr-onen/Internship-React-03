@@ -4,6 +4,7 @@ const initialState = {
   main: [],
   sub: [],
   maincounter: 0,
+  frontCats: [],
 }
 
 const cat = createSlice({
@@ -19,8 +20,11 @@ const cat = createSlice({
     countAddMain: (state, action) => {
       state.maincounter += 1
     },
+    getFrontCats: (state, action) => {
+      state.frontCats = action.payload
+    },
   },
 })
 
-export const { takeMainCats, takeSubCats, countAddMain } = cat.actions
+export const { takeMainCats, takeSubCats, countAddMain, getFrontCats } = cat.actions
 export default cat.reducer
