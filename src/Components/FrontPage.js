@@ -3,20 +3,21 @@ import { useSelector, useDispatch } from "react-redux"
 import { getStore, storeDataResp } from "../Services/Store"
 import { Card, CardBody, CardTitle, CardSubtitle, Button, ButtonGroup } from "reactstrap"
 import { takeToken, takeTokenData } from "../Stores/userStore"
-
+import { Label, Input, FormGroup } from "reactstrap"
 import { getFrontCats } from "../Stores/catStore"
 import { productsHome, frontPageProducts } from "../Services/Product"
 
 let cats = [],
-  arrCats = [],
-  checks = []
+  arrCats = []
+let checkList = []
+let storeObjs = []
 function FrontPage() {
   const AppState = useSelector((state) => state)
   const Dispatch = useDispatch()
   if (AppState.user.store_id) getStore(AppState.user.token, AppState.user.store_id)
   const [products, setProducts] = useState([])
   const [checks, setChecks] = useState([])
-
+  const [searchWord, setSearchWord] = useState()
   useEffect(() => {
     frontPageProducts(AppState.user.token).then(() => {
       setTimeout(() => {
@@ -53,29 +54,70 @@ function FrontPage() {
     Dispatch(getFrontCats(arrCats))
     arrCats = []
   }, [products])
+
   function checboxEvents(e) {
     let parente = e.target.parentElement.parentElement
     let targetValue = e.target.previousElementSibling.value
 
     if (checks.indexOf(targetValue) != -1) {
       let filtered = checks.filter((item) => item != targetValue)
+      checkList = filtered
+
       setChecks(filtered)
     } else {
+      checkList.push(targetValue)
       setChecks((prev) => [...prev, targetValue])
+      let uniqArr = checkList.filter((x, i, a) => a.indexOf(x) == i)
+      setChecks(uniqArr)
     }
-    let allChecks = parente
-    if (parente.querySelectorAll("input").every((item) => checks.indexOf(item.value) != -1)) {
+
+    let allChecks = parente.querySelectorAll("input")
+
+    if (Array.from(allChecks).every((item) => checkList.indexOf(item.value) != -1)) {
       parente.parentElement.querySelector("input").checked = true
+    } else {
+      parente.parentElement.querySelector("input").checked = false
     }
-    console.log(parente.querySelectorAll("input"))
   }
+
+  function pressMainCat(e) {
+    let checkArr = []
+    if (e.target.previousSibling.checked === false) {
+      Array.from(e.target.parentElement.querySelectorAll(".subs-item input")).forEach((item) => {
+        item.checked = true
+        if (checks.indexOf(item.value) == -1) {
+          checkArr.push(item.value)
+          setChecks((prev) => [...prev, item.value])
+        }
+      })
+    } else {
+      let filtered = checks
+      Array.from(e.target.parentElement.querySelectorAll(".subs-item input")).map((item) => {
+        console.log("item : ", item)
+
+        filtered.splice(filtered.indexOf(item.value), 1)
+        item.checked = false
+      })
+      setChecks(filtered)
+    }
+  }
+
   function catList() {
     return AppState.cat.frontCats.map((item, index) => {
       return (
         <div className="cat-wrapper" key={item.main_name + index}>
           {" "}
           <input id={item.main_name + item.main_id} type="checkbox" value={item.main_id} />
-          <label htmlFor={item.main_name + item.main_id} className="unsel">
+          <label
+            htmlFor={item.main_name + item.main_id}
+            className="unsel"
+            onMouseDown={(e) => {
+              e.preventDefault()
+            }}
+            onClick={(e) => {
+              pressMainCat(e)
+            }}
+          >
             {item.main_name}
           </label>
           <div className="subs-item">
@@ -86,6 +128,9 @@ function FrontPage() {
                   <label
                     htmlFor={it.sub_id}
                     className="unsel"
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                    }}
                     onClick={(e) => {
                       checboxEvents(e)
                     }}
@@ -130,14 +175,74 @@ function FrontPage() {
       )
     })
   }
+  let storesProduct
+  function storeData() {
+    storesProduct = products?.map((i) =>
+      i?.store?.map((t) => {
+        return {
+          name: t.name,
+          id: t.id,
+        }
+      })
+    )
+    storeObjs = []
+    storesProduct.flat().forEach((item) => {
+      if (storeObjs.every((i) => item.id != i.id)) {
+        storeObjs.push(item)
+      }
+    })
+    console.log(storeObjs)
+  }
+  function storeList() {
+    storeData()
+    return storeObjs.map((item, index) => {
+      return (
+        <option key={index} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
   return (
     <div>
       <div className="frontpage container d-flex">
         <div className="col-3 side-menu">
           <div className="side-menu-wrapper">
             <div className="select-price"></div>
-            <div className="check-cats">{catList()}</div>
-            <div className="select-stores"></div>
+            <div className="input-search">
+              <FormGroup>
+                <Label for="exampleSelect" className="mt-4">
+                  Search
+                </Label>
+                <Input
+                  id="exampleSelect"
+                  name="select"
+                  type="text"
+                  value={searchWord}
+                  onChange={(e) => {
+                    setSearchWord(e.target.value)
+                  }}
+                ></Input>
+                <Button color="primary" className="mt-3">
+                  Search!!
+                </Button>
+              </FormGroup>
+            </div>
+            <div className="check-cats" className="mt-5">
+              {catList()}
+            </div>
+            <div className="select-stores">
+              <FormGroup>
+                <Label for="exampleSelect" className="mt-4">
+                  Stores
+                </Label>
+                <Input id="exampleSelect" name="select" type="select">
+                  <option>All Products</option>
+                  {storeList()}
+                </Input>
+              </FormGroup>
+            </div>
           </div>
         </div>
         <div className="col-9 main-menu p-3 d-flex flex-wrap">{productsList()}</div>
