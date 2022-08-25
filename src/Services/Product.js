@@ -61,12 +61,16 @@ export const getProducts = async (token) => {
       console.log(response)
     })
 }
-export const frontPageProducts = async (token) => {
-  return await Axios.get(`product/products`, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  })
+export const frontPageProducts = async (token, para) => {
+  return await Axios.get(
+    `product/products${para}`,
+
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => {
       productsHome = response.data
     })

@@ -6,22 +6,32 @@ import { takeToken, takeTokenData } from "../Stores/userStore"
 import { Label, Input, FormGroup } from "reactstrap"
 import { getFrontCats } from "../Stores/catStore"
 import { productsHome, frontPageProducts } from "../Services/Product"
+import { useNavigate } from "react-router-dom"
+import ReactPaginate from "react-paginate"
+import ReactDOM from "react-dom"
 
 let cats = [],
   arrCats = []
 let checkList = []
 let storeObjs = []
+let url = new URL(window.location)
+let para = window.location.search
 function FrontPage() {
+  const Navigate = useNavigate()
   const AppState = useSelector((state) => state)
   const Dispatch = useDispatch()
   if (AppState.user.store_id) getStore(AppState.user.token, AppState.user.store_id)
   const [products, setProducts] = useState([])
   const [checks, setChecks] = useState([])
-  const [searchWord, setSearchWord] = useState()
+  const [searchWord, setSearchWord] = useState("")
+  const [storeSelect, setStoreSelect] = useState(0)
+
   useEffect(() => {
-    frontPageProducts(AppState.user.token).then(() => {
+    frontPageProducts(AppState.user.token, para).then((data) => {
+      console.log(data)
       setTimeout(() => {
-        setProducts(productsHome)
+        console.log(productsHome)
+        setProducts(productsHome.data)
       }, 400)
     })
   }, [])
@@ -29,7 +39,7 @@ function FrontPage() {
   useEffect(() => {
     cats = {}
 
-    productsHome.map((itemm) => {
+    productsHome?.data?.map((itemm) => {
       AppState.cat.sub.map((item) => {
         if (item.id == itemm.cat_id) {
           if (cats.hasOwnProperty(item.main_id)) {
@@ -176,6 +186,7 @@ function FrontPage() {
     })
   }
   let storesProduct
+
   function storeData() {
     storesProduct = products?.map((i) =>
       i?.store?.map((t) => {
@@ -191,7 +202,6 @@ function FrontPage() {
         storeObjs.push(item)
       }
     })
-    console.log(storeObjs)
   }
   function storeList() {
     storeData()
@@ -203,6 +213,52 @@ function FrontPage() {
       )
     })
   }
+
+  useEffect(() => {
+    url.searchParams.set("page", 1)
+    if (checks.length !== 0) {
+      url.searchParams.set("cats", checks.toString())
+    } else {
+      url.searchParams.delete("cats")
+    }
+    if (searchWord != "") {
+      url.searchParams.set("search", searchWord)
+    } else {
+      url.searchParams.delete("search")
+    }
+    if (storeSelect !== 0) {
+      url.searchParams.set("store", storeSelect)
+    } else {
+      url.searchParams.delete("store")
+    }
+    Navigate(url.search)
+
+    let para = window.location.search
+    frontPageProducts(AppState.user.token, decodeURI(para)).then(() => {
+      setTimeout(() => {
+        setProducts(productsHome.data)
+        console.log(productsHome)
+      }, 400)
+    })
+  }, [checks, searchWord, storeSelect])
+
+  //paginate//
+
+  const handlePageClick = (event) => {
+    let para = window.location.search
+    url.searchParams.set("page", event.selected + 1)
+    frontPageProducts(AppState.user.token, decodeURI(para)).then(() => {
+      setProducts(productsHome.data)
+      console.log(productsHome)
+    })
+
+    /* fetcData(event.selected + 1, UrlSc, UrlS, UrlKey) */
+  }
+
+  const [pagCount, setPagCount] = useState(5)
+  var itemsPerPage = 1
+  console.log(pagCount)
+  setPagCount(Math.ceil(parseInt(10) / parseInt(itemsPerPage)))
 
   return (
     <div>
@@ -221,7 +277,7 @@ function FrontPage() {
                   type="text"
                   value={searchWord}
                   onChange={(e) => {
-                    setSearchWord(e.target.value)
+                    setTimeout(setSearchWord(e.target.value), 1000)
                   }}
                 ></Input>
                 <Button color="primary" className="mt-3">
@@ -229,15 +285,21 @@ function FrontPage() {
                 </Button>
               </FormGroup>
             </div>
-            <div className="check-cats" className="mt-5">
-              {catList()}
-            </div>
+            <div className="check-cats mt-5">{catList()}</div>
             <div className="select-stores">
               <FormGroup>
                 <Label for="exampleSelect" className="mt-4">
                   Stores
                 </Label>
-                <Input id="exampleSelect" name="select" type="select">
+                <Input
+                  id="exampleSelect"
+                  name="select"
+                  type="select"
+                  value={storeSelect}
+                  onChange={(e) => {
+                    setStoreSelect(e.target.value)
+                  }}
+                >
                   <option>All Products</option>
                   {storeList()}
                 </Input>
@@ -248,6 +310,28 @@ function FrontPage() {
         <div className="col-9 main-menu p-3 d-flex flex-wrap">{productsList()}</div>
       </div>
       {/* {console.log(tree)} */}
+      <div id="pagin">
+        <ReactPaginate
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={1}
+          marginPagesDisplayed={1}
+          pageCount={pagCount}
+          previousLabel="< previous"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          // forcePage={urll == null ? 0 :(urll-1)}
+        />
+      </div>
     </div>
   )
 }
