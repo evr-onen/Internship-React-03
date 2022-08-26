@@ -78,7 +78,7 @@ function App() {
           <Route path="/store-management" element={<StoreManagement />} />
         </Route>
         <Route element={<HashRoutes />}>
-          <Route path={"/" + appState.user.hash} element={<SingleProduct />} />
+          <Route path={"/single" + appState.user.hash} element={<SingleProduct />} />
         </Route>
 
         <Route element={<UnloginRoutes />}>

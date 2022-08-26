@@ -27,10 +27,9 @@ function FrontPage() {
   const [storeSelect, setStoreSelect] = useState(0)
 
   useEffect(() => {
-    frontPageProducts(AppState.user.token, para).then((data) => {
-      console.log(data)
+    frontPageProducts(AppState.user.token, decodeURI(url.search)).then(() => {
       setTimeout(() => {
-        console.log(productsHome)
+        console.log(productsHome.data)
         setProducts(productsHome.data)
       }, 400)
     })
@@ -38,12 +37,20 @@ function FrontPage() {
 
   useEffect(() => {
     cats = {}
+    let productsHomeArr
+    if (productsHome.data != undefined) {
+      productsHomeArr = Object.values(productsHome.data)
+    }
 
-    productsHome?.data?.map((itemm) => {
+    /* setTimeout(() => {
+      if (Object.is(productsHome.data)) productsHomeArr = Object.values(productsHome.data)
+    }, 400) */
+    /* console.log(productsHomeArr) */
+    for (let i in productsHomeArr) /* .map((itemm) =>  */ {
       AppState.cat.sub.map((item) => {
-        if (item.id == itemm.cat_id) {
+        if (item.id == productsHomeArr[i].cat_id) {
           if (cats.hasOwnProperty(item.main_id)) {
-            if (cats[item.main_id].subs.every((it) => it.sub_id != itemm.cat_id)) {
+            if (cats[item.main_id].subs.every((it) => it.sub_id != productsHomeArr[i].cat_id)) {
               cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
             }
           } else {
@@ -51,13 +58,13 @@ function FrontPage() {
             cats[item.main_id].main_id = item.main_id
             cats[item.main_id].main_name = item.main_name
             cats[item.main_id].subs = []
-            if (cats[item.main_id].subs.every((it) => it.sub_id != itemm.cat_id)) {
+            if (cats[item.main_id].subs.every((it) => it.sub_id != productsHomeArr[i].cat_id)) {
               cats[item.main_id].subs.push({ sub_id: item.id, sub_name: item.name })
             }
           }
         }
       })
-    })
+    }
     for (let i in cats) {
       arrCats.push(cats[i])
     }
@@ -165,6 +172,7 @@ function FrontPage() {
           className="m-3"
           key={index}
         >
+          {console.log(item.store)}
           <img alt="Card image" src={"http://127.0.0.1:8000" + item.images[0].path} />
           <CardBody className="d-flex flex-column">
             <CardTitle className="text-center" tag="h5">
@@ -234,7 +242,7 @@ function FrontPage() {
     Navigate(url.search)
 
     let para = window.location.search
-    frontPageProducts(AppState.user.token, decodeURI(para)).then(() => {
+    frontPageProducts(AppState.user.token, decodeURI(url.search)).then(() => {
       setTimeout(() => {
         setProducts(productsHome.data)
         console.log(productsHome)
@@ -247,18 +255,25 @@ function FrontPage() {
   const handlePageClick = (event) => {
     let para = window.location.search
     url.searchParams.set("page", event.selected + 1)
-    frontPageProducts(AppState.user.token, decodeURI(para)).then(() => {
-      setProducts(productsHome.data)
-      console.log(productsHome)
-    })
+    Navigate(url.search)
+    let goToPage = event.selected
+    frontPageProducts(AppState.user.token, decodeURI(url.search)).then(() => {
+      // setTimeout(() => {
+      let productCont = []
 
-    /* fetcData(event.selected + 1, UrlSc, UrlS, UrlKey) */
+      setProducts(Object.values(productsHome.data))
+
+      // }, 100)
+    })
   }
 
-  const [pagCount, setPagCount] = useState(5)
+  const [pagCount, setPagCount] = useState(2)
   var itemsPerPage = 1
-  console.log(pagCount)
-  setPagCount(Math.ceil(parseInt(10) / parseInt(itemsPerPage)))
+
+  useEffect(() => {
+    setPagCount(Math.ceil(productsHome.total / parseInt(itemsPerPage)))
+    catList()
+  }, [products])
 
   return (
     <div>
@@ -314,7 +329,7 @@ function FrontPage() {
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
+          pageRangeDisplayed={5}
           marginPagesDisplayed={1}
           pageCount={pagCount}
           previousLabel="< previous"
